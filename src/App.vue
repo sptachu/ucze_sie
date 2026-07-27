@@ -1,47 +1,36 @@
 <script setup>
-import HelloWorld from './components/HelloWorld.vue'
-import TheWelcome from './components/TheWelcome.vue'
 
   import {ref} from 'vue';
-  import { DatePicker } from 'v-calendar';
-  import 'v-calendar/style.css'
+  import MyCalendar from './components/MyCalendar.vue';
 
   const wybrana_data = ref(new Date());
 
 </script>
 
 <template>
-  <main>    
-    <div class="calendar-card">
-    <h2 class="top-text">Wybierz datę</h2>
-    <DatePicker v-model="wybrana_data"/>
-    <p class="result-text">Wybrałeś:</p>
-    <strong class="result-text"> {{ wybrana_data }}</strong>
+  <main>
+    <MyCalendar v-model="wybrana_data" />
+
+    <div class="result-container">
+      <p class="result-text">Wybrałeś:</p>
+      <strong class="result-text">{{ wybrana_data }}</strong>
     </div>
+    
   </main>
 </template>
 
 <style scoped>
   main {
-    display: flex;
-    justify-content: center;
-    min-height: 100vh;
-    align-items: center;
-  }
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 100vh;
+  align-items: center;
+  gap: 2rem; /* Dodajemy odstęp między kalendarzem a napisami pod spodem */
+}
 
-  .calendar-card {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 1.5rem;
-    padding: 2rem;
-    border-radius: 13px;
-    box-shadow: 0 4px 12px;
-    min-width: 670px;
-    max-width: 90vw;
-  }
-
-  .result-text, .top-text {
-    font-family: Arial, Helvetica, sans-serif;
-  }
+.result-text {
+  font-family: Arial, Helvetica, sans-serif;
+  text-align: center;
+}
 </style>
