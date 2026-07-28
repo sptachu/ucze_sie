@@ -1,19 +1,32 @@
 <script setup>
-
   import {ref} from 'vue';
   import MyCalendar from './components/MyCalendar.vue';
+  import MainButton from './components/MainButton.vue';
 
-  const wybrana_data = ref(new Date());
+  const selectedDateRange = ref({
+    start: new Date(),
+    end: new Date()
+  });
+
+  const saveDates = () => {
+    const datesJSON = JSON.stringify(selectedDateRange.value);
+    localStorage.setItem('savedDates', datesJSON);
+    alert('Daty zostały pomyślnie zapisane!');
+  };
 
 </script>
 
 <template>
   <main>
-    <MyCalendar v-model="wybrana_data" />
+    <MyCalendar v-model="selectedDateRange" />
+
+    <MainButton btn-type="mainBtn" @click="saveDates">
+      Zatwierdź
+    </MainButton>
 
     <div class="result-container">
       <p class="result-text">Wybrałeś:</p>
-      <strong class="result-text">{{ wybrana_data }}</strong>
+      <strong class="result-text">{{ selectedDateRange }}</strong>
     </div>
     
   </main>
