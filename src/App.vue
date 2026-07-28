@@ -1,32 +1,33 @@
 <script setup>
-  import {ref} from 'vue';
+ import { ref } from 'vue';
   import MyCalendar from './components/MyCalendar.vue';
   import MainButton from './components/MainButton.vue';
+  import { useCalendarStore } from './stores/calendarStore';
+  const calendarStore = useCalendarStore();
 
-  const selectedDateRange = ref({
+  const draftDateRange = ref({
     start: new Date(),
     end: new Date()
   });
 
-  const saveDates = () => {
-    const datesJSON = JSON.stringify(selectedDateRange.value);
-    localStorage.setItem('savedDates', datesJSON);
-    alert('Daty zostały pomyślnie zapisane!');
+  const handleSave = () => {
+    calendarStore.addDateRange(draftDateRange.value);
+    alert('Daty zostały pomyślnie zapisane w magazynie!');
   };
 
 </script>
 
 <template>
   <main>
-    <MyCalendar v-model="selectedDateRange" />
+    <MyCalendar v-model="draftDateRange" />
 
-    <MainButton btn-type="mainBtn" @click="saveDates">
+    <MainButton btn-type="mainBtn" @click="handleSave">
       Zatwierdź
     </MainButton>
 
     <div class="result-container">
       <p class="result-text">Wybrałeś:</p>
-      <strong class="result-text">{{ selectedDateRange }}</strong>
+      <strong class="result-text">{{ draftDateRange }}</strong>
     </div>
     
   </main>
