@@ -1,50 +1,55 @@
 <script setup>
- import { ref } from 'vue';
-  import MyCalendar from './components/MyCalendar.vue';
-  import MainButton from './components/MainButton.vue';
-  import { useCalendarStore } from './stores/calendarStore';
-  const calendarStore = useCalendarStore();
-
-  const draftDateRange = ref({
-    start: new Date(),
-    end: new Date()
-  });
-
-  const handleSave = () => {
-    calendarStore.addDateRange(draftDateRange.value);
-    alert('Daty zostały pomyślnie zapisane w magazynie!');
-  };
 
 </script>
 
 <template>
-  <main>
-    <MyCalendar v-model="draftDateRange" />
+  <div class="app-layout">
+    <nav class="navbar">
+      <h2 class="logo">Wybieracz Dat</h2>
+      <div class="links">
+        <router-link to="/">Kalendarz</router-link>
+        <router-link to="/historia">Historia</router-link>
+      </div>
+    </nav>
 
-    <MainButton btn-type="mainBtn" @click="handleSave">
-      Zatwierdź
-    </MainButton>
-
-    <div class="result-container">
-      <p class="result-text">Wybrałeś:</p>
-      <strong class="result-text">{{ draftDateRange }}</strong>
-    </div>
-    
-  </main>
+    <main class="page-content">
+      <router-view />
+    </main>
+  </div>
 </template>
 
 <style scoped>
-  main {
+.navbar {
   display: flex;
-  flex-direction: column;
-  justify-content: center;
-  min-height: 100vh;
+  justify-content: space-between;
   align-items: center;
-  gap: 2rem; /* Dodajemy odstęp między kalendarzem a napisami pod spodem */
+  padding: 1rem 2rem;
+  background-color: #f8f9fa;
+  border-bottom: 2px solid #e9ecef;
 }
 
-.result-text {
-  font-family: Arial, Helvetica, sans-serif;
-  text-align: center;
+.logo {
+  margin: 0;
+  font-family: Arial, sans-serif;
+}
+
+.links {
+  display: flex;
+  gap: 1.5rem;
+}
+
+.links a {
+  text-decoration: none;
+  color: #333;
+  font-weight: bold;
+  font-family: Arial, sans-serif;
+}
+
+.links a.router-link-active {
+  color: #3b82f6; 
+}
+
+.page-content {
+  padding: 2rem;
 }
 </style>
