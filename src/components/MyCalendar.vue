@@ -8,7 +8,7 @@ const choseDate = defineModel();
 <template>
   <div class="calendar-card">
     <h2 class="top-text">Wybierz datę</h2>
-    <DatePicker v-model="choseDate"/>
+    <DatePicker v-model="choseDate" is-range/>
   </div>
 </template>
 
