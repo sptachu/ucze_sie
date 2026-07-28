@@ -11,7 +11,11 @@ export const useCalendarStore = defineStore('calendar', () => {
     })
   }
 
-    return { savedHistory, addDateRange }}, 
+  const clearHistory = () => {
+  savedHistory.value = [] 
+  }
+
+    return { savedHistory, addDateRange, clearHistory }}, 
 {
   persist: true 
 })
