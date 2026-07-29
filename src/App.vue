@@ -9,6 +9,7 @@
       <div class="links">
         <router-link to="/">Kalendarz</router-link>
         <router-link to="/historia">Historia</router-link>
+        <router-link to="/dashboard">Dashboard</router-link>
       </div>
     </nav>
 

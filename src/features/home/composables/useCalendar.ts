@@ -7,7 +7,7 @@ type DateRangeState = {
 
 export default function useCalendar() {
     const calendarStore = useCalendarStore();
-    const currentNote = ref<string>('');
+    const currentNote = ref('');
     // todo zmien na osobne zmienne albo reactive i potestuj
     const draftDateRange = ref<DateRangeState>({
         start: new Date(),
