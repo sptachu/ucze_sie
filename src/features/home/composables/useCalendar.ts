@@ -7,7 +7,7 @@ type DateRangeState = {
 
 export default function useCalendar() {
     const calendarStore = useCalendarStore();
-
+    const currentNote = ref<string>('');
     // todo zmien na osobne zmienne albo reactive i potestuj
     const draftDateRange = ref<DateRangeState>({
         start: new Date(),
@@ -15,12 +15,16 @@ export default function useCalendar() {
     });
 
     const handleSaveDateRange = () => {
-        calendarStore.addDateRange(draftDateRange.value);
+        calendarStore.addDateRange(draftDateRange.value, currentNote.value);
+        currentNote.value='';
         alert('Daty zostały pomyślnie zapisane w magazynie!');
     };
 
+    
+
     return {
         draftDateRange,
-        handleSaveDateRange
+        handleSaveDateRange,
+        currentNote
     }
 }
