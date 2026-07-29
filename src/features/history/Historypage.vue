@@ -14,7 +14,7 @@
           :key="index"
           class="history-item"
         >
-          <div class="item-header">Wybór #{{ index + 1 }}</div>
+          <div class="item-header">Wybór #{{ index + 1 }}: {{ range.note || 'brak notatki' }}</div>
           <div class="item-dates">
             <strong class="date-text">{{ toDateString(range.start) }}</strong>
             <span class="separator"> — </span>
