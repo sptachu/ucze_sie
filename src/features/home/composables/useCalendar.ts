@@ -1,30 +1,41 @@
-import { ref } from 'vue';
+import { ref, reactive } from 'vue';
 import { useCalendarStore } from '@/stores/calendarStore';
-type DateRangeState = {
-    start: Date,
-    end: Date
+import type { RangeAndNote } from '@/stores/calendarStore';
+
+type CalendarFormState = {
+    dateRange: {
+        start: Date;
+        end: Date;
+    };
+    note: string;
 }
 
 export default function useCalendar() {
     const calendarStore = useCalendarStore();
-    const currentNote = ref('');
     // todo zmien na osobne zmienne albo reactive i potestuj
-    const draftDateRange = ref<DateRangeState>({
-        start: new Date(),
-        end: new Date()
+    const formState = reactive<CalendarFormState>({
+        dateRange: {
+            start: new Date(),
+            end: new Date()
+        },
+        note: ''
     });
 
     const handleSaveDateRange = () => {
-        calendarStore.addDateRange(draftDateRange.value, currentNote.value);
-        currentNote.value='';
+        const payload: RangeAndNote = {
+            start: formState.dateRange.start.toISOString(),
+            end: formState.dateRange.end.toISOString(),
+            note: formState.note
+        };
+        calendarStore.addDateRange(payload);
+        formState.note = '';
         alert('Daty zostały pomyślnie zapisane w magazynie!');
     };
 
     
 
     return {
-        draftDateRange,
+        formState,
         handleSaveDateRange,
-        currentNote
     }
 }

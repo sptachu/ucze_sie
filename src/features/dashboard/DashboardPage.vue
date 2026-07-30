@@ -30,7 +30,7 @@
     :dialogHeader="dialogHeader"
     :submitLabel="submitLabel"
     @close="closeDialog"
-    @save="savePerson"
+    @save="(updatedData) => savePerson(updatedData)"
     />
     <deleteDialog/>
 </template>
@@ -40,10 +40,10 @@ import { usePeopleStore } from '@/stores/peopleStore';
 import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
 import Button from 'primevue/button';
-import addingDialog from '@/features/dashboard/components/addingDialog.vue';
-import deleteDialog from '@/features/dashboard/components/deleteDialog.vue';
-import { useAddingDialog } from '@/features/dashboard/composables/addingDialog';
-import { useDeleteUser } from '@/features/dashboard/composables/deleteDialog';
+import AddingDialog from '@/features/dashboard/components/AddingDialog.vue';
+import DeleteDialog from '@/features/dashboard/components/DeleteDialog.vue';
+import { useAddingDialog } from '@/features/dashboard/composables/useAddingDialog';
+import { useDeleteUser } from '@/features/dashboard/composables/useDeleteDialog';
 
 const { 
     visible, formData, genderOptions, dialogHeader, 

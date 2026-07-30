@@ -1,8 +1,12 @@
 export default function dateFormat() {
-    const toDateString = (dateString:Date) => {
-        if (!(dateString instanceof Date)) return 'Brak daty';
+    const toDateString = (dateString:Date|string) => {
+        const date = new Date(dateString);
+
+        if (isNaN(date.getTime())) {
+            return 'Brak daty';
+        }
         
-        return dateString.toLocaleDateString('pl-PL', {
+        return date.toLocaleDateString('pl-PL', {
             day: 'numeric',
             month: 'long',
             year: 'numeric'

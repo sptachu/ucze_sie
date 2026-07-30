@@ -17,10 +17,11 @@ export interface Person {
     updatedAt: string;
 }
 
+export type User = Omit<Person, 'createdAt' | 'updatedAt'>;
+
 export const usePeopleStore = defineStore('people', () => {
     const peopleList = ref<Person[]>([]);
 
-    // Dodajemy osobę. Wykluczamy id, createdAt i updatedAt, bo sklep wygeneruje je sam.
     const addPerson = (personData: Omit<Person, 'id' | 'createdAt' | 'updatedAt'>) => {
         const now = new Date().toISOString(); 
         
@@ -33,11 +34,17 @@ export const usePeopleStore = defineStore('people', () => {
         peopleList.value.push(newPerson);
     };
 
-    const updatePerson = (updatedPerson: Person) => {
-        const index = peopleList.value.findIndex(p => p.id === updatedPerson.id);
-        if (index !== -1) {
-            updatedPerson.updatedAt = new Date().toISOString();
-            peopleList.value[index] = updatedPerson;
+    const updatePerson = (updatedUser: User) => {
+        const person = peopleList.value.find(p => p.id === updatedUser.id);
+        
+        if (person) {
+            person.firstName = updatedUser.firstName;
+            person.lastName = updatedUser.lastName;
+            person.gender = updatedUser.gender;
+            person.pb5k = updatedUser.pb5k;
+            
+            person.updatedAt = new Date().toISOString();
+            
         }
     };
 
