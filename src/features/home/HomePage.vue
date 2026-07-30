@@ -1,13 +1,13 @@
 <template>
   <main>
     <div class="action-container">
-        <MyCalendar v-model="draftDateRange" />
+        <MyCalendar v-model="formState.dateRange" />
 
         <div class="note-section">
             <label for="date-note">Dodaj notatkę (opcjonalnie):</label>
             <textarea 
                 id="date-note" 
-                v-model="currentNote" 
+                v-model="formState.note" 
                 placeholder="co bedziesz wtedy robić" 
             ></textarea>
         </div>
@@ -18,7 +18,7 @@
 
     <div class="result-container">
       <p class="result-text">Wybrałeś:</p>
-      <strong class="result-text">{{ draftDateRange }}</strong>
+      <strong class="result-text">{{ formState.dateRange }}</strong>
     </div>
     
   </main>
@@ -28,7 +28,7 @@
   import MyCalendar from '@/features/home/components/MyCalendar.vue';
   import MainButton from '@/features/shared/components/MainButton.vue';
   import useCalendar from './composables/useCalendar';
-  const {draftDateRange, handleSaveDateRange, currentNote} = useCalendar();
+  const {formState, handleSaveDateRange} = useCalendar();
   
 
 </script>
