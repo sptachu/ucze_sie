@@ -1,10 +1,11 @@
 <template>
     <div>
-        <div class="flex justify-center mb-6">
-            <Button label="Dodaj osobę" icon="pi pi-plus" @click="openDialog()" />
+        <div class="flex justify-center mb-6 gap-3">
+            <Button label="Wylosuj randoma" icon="pi pi-sparkles" severity="help" @click="generateRandom()" />
+            <Button label="Dodaj osobę" icon="pi pi-user-plus" @click="openDialog()" />
         </div>
 
-        <DataTable :value="peopleStore.peopleList" showGridlines tableStyle="min-width: 50rem" emptyMessage="Brak zawodników.">
+        <DataTable :value="peopleStore.peopleList" paginator :rows="10" :rowsPerPageOptions="[5,10,15,20,50]" showGridlines tableStyle="min-width: 50rem" emptyMessage="Brak zawodników.">
             
             <Column field="firstName" header="Imię" style="width: 25%"></Column>
             <Column field="lastName" header="Nazwisko" style="width: 25%"></Column>
@@ -44,12 +45,13 @@ import DeleteDialog from '@/features/dashboard/components/DeleteDialog.vue';
 import useDashboard from '@/features/dashboard/composables/useDashboard';
 import { useAddingDialog } from '@/features/dashboard/composables/useAddingDialog';
 import { useDeleteUser } from '@/features/dashboard/composables/useDeleteDialog';
-const { peopleStore} = useDashboard();
+import { useRandomPerson } from './composables/useRandomuser';
 
+const { peopleStore} = useDashboard();
+const { generateRandom } = useRandomPerson();
+const { confirmDeletion } = useDeleteUser();
 const { 
     visible, formData, genderOptions, dialogHeader, 
     submitLabel, openDialog, closeDialog, savePerson 
 } = useAddingDialog();
-
-const { confirmDeletion } = useDeleteUser();
 </script>
