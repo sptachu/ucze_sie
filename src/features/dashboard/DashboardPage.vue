@@ -5,7 +5,7 @@
             <Button label="Dodaj osobę" icon="pi pi-user-plus" @click="openDialog()" />
         </div>
 
-        <DataTable :value="peopleStore.peopleList" showGridlines tableStyle="min-width: 50rem" emptyMessage="Brak zawodników.">
+        <DataTable :value="peopleStore.peopleList" paginator :rows="10" :rowsPerPageOptions="[5,10,15,20,50]" showGridlines tableStyle="min-width: 50rem" emptyMessage="Brak zawodników.">
             
             <Column field="firstName" header="Imię" style="width: 25%"></Column>
             <Column field="lastName" header="Nazwisko" style="width: 25%"></Column>
