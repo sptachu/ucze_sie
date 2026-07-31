@@ -7,10 +7,10 @@
 
         <DataTable :value="peopleStore.peopleList" paginator :rows="10" :rowsPerPageOptions="[5,10,15,20,50]" showGridlines tableStyle="min-width: 50rem" emptyMessage="Brak zawodników.">
             
-            <Column field="firstName" header="Imię" style="width: 25%"></Column>
-            <Column field="lastName" header="Nazwisko" style="width: 25%"></Column>
-            <Column field="gender" header="Płeć" style="width: 20%"></Column>
-            <Column field="pb5k" header="PB (5km)" style="width: 15%"></Column>
+            <Column field="firstName" sortable header="Imię" style="width: 25%"></Column>
+            <Column field="lastName" sortable header="Nazwisko" style="width: 25%"></Column>
+            <Column field="gender" sortable header="Płeć" style="width: 20%"></Column>
+            <Column field="pb5k" sortable header="PB (5km)" style="width: 15%"></Column>
 
             <Column header="Akcje" style="width: 15%">
                 <template #body="{ data }">
