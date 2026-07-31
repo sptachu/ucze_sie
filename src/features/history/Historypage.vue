@@ -33,13 +33,18 @@
 </template>
 
 <script setup>
+import { onMounted } from 'vue';
 import { useCalendarStore } from '@/stores/calendarStore';
 import MainButton from '@/features/shared/components/MainButton.vue';
 import dateFormat from '../shared/utils/dateFormats';
 
+
 const calendarStore = useCalendarStore();
 const {toDateString} = dateFormat();
 
+onMounted(() => {
+    calendarStore.loadCalendar();
+});
 
 </script>
 
