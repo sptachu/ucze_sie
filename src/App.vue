@@ -1,5 +1,5 @@
-<script setup>
-
+<script setup lang="ts">
+import Toast from 'primevue/toast';
 </script>
 
 <template>
@@ -14,6 +14,7 @@
     </nav>
 
     <main class="page-content">
+      <Toast position="top-center"/>
       <router-view />
     </main>
   </div>

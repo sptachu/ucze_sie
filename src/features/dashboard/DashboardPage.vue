@@ -15,7 +15,7 @@
                 <template #body="{ data }">
                     <div class="flex gap-3 justify-center">
                         <Button icon="pi pi-pencil" outlined rounded @click="openDialog(data)" />
-                        <Button icon="pi pi-trash" severity="danger" outlined rounded @click="confirmDeletion(data.id)" />
+                        <Button icon="pi pi-trash" severity="danger" outlined rounded @click="confirmDeletion(data.id, data.firstName)" />
                     </div>
                 </template>
             </Column>

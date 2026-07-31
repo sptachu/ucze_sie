@@ -32,9 +32,13 @@ export const usePeopleStore = defineStore('people', () => {
                 const data = await response.json();
                 
                 peopleList.value = data;
+                return true;
+            } else {
+                return false;
             }
         } catch (error) {
             console.error('Błąd podczas pobierania danych:', error);
+            return false;
         }
     };
 
@@ -58,11 +62,14 @@ export const usePeopleStore = defineStore('people', () => {
             if (response.ok) {
                 const savedPerson = await response.json();
                 peopleList.value.push(savedPerson); 
+                return true;
             } else {
                 console.error('Błąd HTTP! Status:', response.status);
+                return false;
             }
         } catch (error) {
             console.error('Błąd połączenia fetch:', error);
+            return false;
         }
     };
 
@@ -89,11 +96,16 @@ export const usePeopleStore = defineStore('people', () => {
                     person.gender = updatedUser.gender;
                     person.pb5k = updatedUser.pb5k;
                     person.updatedAt = payloadToSave.updatedAt;
+                    return true;
+                } else {
+                    return false;
                 }
             } catch (error) {
                 console.error('Błąd podczas aktualizacji:', error);
+                return false;
             }
         }
+        return false;
     };
 
     const deletePerson = async (id: string) => {
@@ -104,9 +116,13 @@ export const usePeopleStore = defineStore('people', () => {
 
             if (response.ok) {
                 peopleList.value = peopleList.value.filter(p => p.id !== id);
+                return true;
+            } else {
+                return false;
             }
         } catch (error) {
             console.error('Błąd podczas usuwania:', error);
+            return false;
         }
     };
 

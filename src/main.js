@@ -10,6 +10,7 @@ import Aura from '@primeuix/themes/aura'
 import 'primeicons/primeicons.css';
 import './assets/main.css';
 import ConfirmationService from 'primevue/confirmationservice';
+import ToastService from 'primevue/toastservice';
 
 const app = createApp(App)
 const pinia = createPinia()
@@ -22,5 +23,6 @@ app.use(PrimeVue, {
         preset: Aura
     }
 })
+app.use(ToastService);
 app.use(ConfirmationService)
 app.mount('#app')
