@@ -1,6 +1,7 @@
 import { ref, reactive, computed } from 'vue';
 import { usePeopleStore, Gender } from '@/stores/peopleStore';
-import type { Person, User } from '@/stores/peopleStore';
+import type { User } from '@/stores/peopleStore';
+import { useToast } from 'primevue/usetoast';
 
 export type GenderOptions = {
     label:string,
@@ -9,6 +10,7 @@ export type GenderOptions = {
 
 export function useAddingDialog() {
     const peopleStore = usePeopleStore();
+    const toast = useToast();
     
     const visible = ref(false);
     const isEditMode = ref(false);
@@ -51,14 +53,22 @@ export function useAddingDialog() {
         visible.value = false;
     };
 
-    const savePerson = (updatedData: User) => {
+    const savePerson = async (updatedData: User) => {
+        let isSuccess = false; 
+
         if (isEditMode.value) {
-            peopleStore.updatePerson(updatedData);
+            isSuccess = await peopleStore.updatePerson(updatedData);
         } else {
             const { id, ...newPersonData } = updatedData;
-            peopleStore.addPerson(newPersonData);
+            isSuccess = await peopleStore.addPerson(newPersonData);
         }
-        closeDialog(); 
+
+        if (isSuccess) {
+            toast.add({ severity: 'success', summary: 'Sukces', detail: 'Zapisano zawodnika!', life: 3000 });
+            closeDialog(); 
+        } else {
+            toast.add({ severity: 'error', summary: 'Błąd', detail: 'Nie udało się zapisać. Sprawdź połączenie.', life: 4000 });
+        }
     };
 
     return {

@@ -15,7 +15,7 @@
                 <template #body="{ data }">
                     <div class="flex gap-3 justify-center">
                         <Button icon="pi pi-pencil" outlined rounded @click="openDialog(data)" />
-                        <Button icon="pi pi-trash" severity="danger" outlined rounded @click="confirmDeletion(data.id)" />
+                        <Button icon="pi pi-trash" severity="danger" outlined rounded @click="confirmDeletion(data.id, data.firstName)" />
                     </div>
                 </template>
             </Column>
@@ -36,14 +36,15 @@
 </template>
 
 <script setup lang="ts">
-import { usePeopleStore } from '@/stores/peopleStore';
 import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
 import Button from 'primevue/button';
 import AddingDialog from '@/features/dashboard/components/AddingDialog.vue';
 import DeleteDialog from '@/features/dashboard/components/DeleteDialog.vue';
+import useDashboard from '@/features/dashboard/composables/useDashboard';
 import { useAddingDialog } from '@/features/dashboard/composables/useAddingDialog';
 import { useDeleteUser } from '@/features/dashboard/composables/useDeleteDialog';
+const { peopleStore} = useDashboard();
 
 const { 
     visible, formData, genderOptions, dialogHeader, 
@@ -51,6 +52,4 @@ const {
 } = useAddingDialog();
 
 const { confirmDeletion } = useDeleteUser();
-
-const peopleStore = usePeopleStore();
 </script>
