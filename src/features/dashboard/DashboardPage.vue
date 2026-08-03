@@ -5,12 +5,36 @@
             <Button label="Dodaj osobę" icon="pi pi-user-plus" @click="openDialog()" />
         </div>
 
-        <DataTable :value="peopleWithFullName" paginator :rows="10" :rowsPerPageOptions="[5,10,15,20,50]" showGridlines tableStyle="min-width: 50rem" emptyMessage="Brak zawodników." v-model:filters="filters"
-        :globalFilterFields="['firstName', 'lastName', 'fullName']">
+        <DataTable 
+            :value="peopleList" 
+            :loading="isLoading" 
+            paginator 
+            :rows="10" 
+            :rowsPerPageOptions="[5,10,15,20,50]" 
+            showGridlines 
+            tableStyle="min-width: 50rem" 
+            emptyMessage="Brak zawodników." 
+            v-model:filters="filters"
+            :globalFilterFields="['firstName', 'lastName', 'fullName']">
 
             <template #header>
                 <div class="flex justify-center">
                     <InputText v-model="filters['global'].value" placeholder="Szukaj zawodnika..." />
+                </div>
+            </template>
+
+            <template #loading>
+                <div class="flex flex-col items-center justify-center p-8">
+                    <i class="pi pi-spin pi-spinner text-4xl text-purple-500 mb-4"></i>
+                    <span class="text-xl font-bold text-gray-600">Pobieranie zawodników...</span>
+                </div>
+            </template>
+
+            <template #empty>
+                <div class="flex flex-col items-center justify-center p-8">
+                    <i class="pi pi-users text-4xl text-gray-400 mb-4"></i>
+                    <span class="text-xl font-bold text-gray-600 mb-2">Brak zawodników</span>
+                    <span class="text-gray-500 text-sm">Nie znaleziono żadnych rekordów do wyświetlenia.</span>
                 </div>
             </template>
             
@@ -39,12 +63,13 @@
     :submitLabel="submitLabel"
     @close="closeDialog"
     @save="(updatedData) => savePerson(updatedData)"
+    :isSubmitting="isSubmitting"
     />
     <deleteDialog/>
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue';
+import { ref } from 'vue';
 import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
 import Button from 'primevue/button';
@@ -56,22 +81,17 @@ import { useAddingDialog } from '@/features/dashboard/composables/useAddingDialo
 import { useDeleteUser } from '@/features/dashboard/composables/useDeleteDialog';
 import { useRandomPerson } from './composables/useRandomUser';
 
-const { peopleStore} = useDashboard();
+const {peopleList, isLoading} = useDashboard()
 const { generateRandom } = useRandomPerson();
 const { confirmDeletion } = useDeleteUser();
 const { 
     visible, formData, genderOptions, dialogHeader, 
-    submitLabel, openDialog, closeDialog, savePerson 
+    submitLabel, openDialog, closeDialog, savePerson, isSubmitting
 } = useAddingDialog();
 
 const filters = ref({
     global: { value: null, matchMode: 'contains' } 
 });
 
-const peopleWithFullName = computed(() => {
-    return peopleStore.peopleList.map(person => ({
-        ...person,
-        fullName: `${person.firstName} ${person.lastName}` 
-    }));
-});
+ // useDashboardPage i tam wszyskie crud z serwisu w kazdej funkcji lacze sie z serwisem i ogarniam dane. w usedashboardpage lacze sie tez z peoplestore. ten usedashboardpage ma zwracac cala tablice userow
 </script>

@@ -1,15 +1,16 @@
 import { onMounted } from 'vue';
-import { usePeopleStore } from '@/stores/peopleStore';
+import  useDashboardPage  from '@/features/dashboard/composables/useDashboardPage'
 
 export default function useDashboard() {
-    const peopleStore = usePeopleStore();
+    const {peopleList, isLoading, loadPeople } = useDashboardPage();
 
     onMounted(() => {
-        peopleStore.loadPeople();
+        loadPeople();
     });
 
 
     return {
-        peopleStore,
+        peopleList,
+        isLoading
     };
 }

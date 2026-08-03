@@ -1,11 +1,11 @@
 import { useConfirm } from 'primevue/useconfirm';
-import { usePeopleStore } from '@/stores/peopleStore';
 import { useToast } from 'primevue/usetoast';
+import  useDashboardPage  from '@/features/dashboard/composables/useDashboardPage';
 
 export function useDeleteUser() {
     const confirm = useConfirm();
-    const peopleStore = usePeopleStore();
     const toast = useToast();
+    const { deletePerson } = useDashboardPage();
 
     const confirmDeletion = (id: string, firstName:string) => {
         confirm.require({
@@ -22,7 +22,7 @@ export function useDeleteUser() {
                 severity: 'danger'
             },
             accept: async () => {
-                const isSuccess = await peopleStore.deletePerson(id);
+                const isSuccess = await deletePerson(id);
 
                 if (isSuccess) {
                     toast.add({ 
@@ -31,14 +31,17 @@ export function useDeleteUser() {
                         detail: `Zawodnik ${firstName} został trwale usunięty z bazy.`, 
                         life: 5000 
                     });
-                } else {
-                    toast.add({ 
-                        severity: 'warn', 
-                        summary: 'Błąd', 
-                        detail: `Nie udało się usunąć zawodnika ${firstName}. Spróbuj ponownie.`, 
-                        life: 6000 
-                    });
+
+                    return
                 }
+
+                toast.add({ 
+                    severity: 'warn', 
+                    summary: 'Błąd', 
+                    detail: `Nie udało się usunąć zawodnika ${firstName}. Spróbuj ponownie.`, 
+                    life: 6000  // dodaj globalne ustwienie toastow - global composable
+                });
+                
             }
         });
     };
