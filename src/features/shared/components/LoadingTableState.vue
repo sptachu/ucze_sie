@@ -1,0 +1,1 @@
+// pozbyc sie z glownego i wrzucic tutaj a jak sa jakies wartosci to wrzucic w props

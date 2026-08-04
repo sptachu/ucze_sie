@@ -1,5 +1,4 @@
-import { Gender } from '@/stores/peopleStore';
-import type { Person, User } from '@/stores/peopleStore';
+import type { Person} from '@/stores/peopleStore';
 
 const API_URL = 'http://localhost:3001/people';
 
@@ -21,27 +20,23 @@ export const peopleService = {
 
         const response = await fetch(API_URL, {
             method: 'POST',
-            // headers: { 'Content-Type': 'application/json' }, 
             body: JSON.stringify(newPerson)
         });
-        if (!response.ok) throw new Error('Błąd dodawania zawodnika');
         return response.json();
     },
 
     async update(id: string, payload: Partial<Person>): Promise<Person> {
         const response = await fetch(`${API_URL}/${id}`, {
             method: 'PUT',
-            // headers: { 'Content-Type': 'application/json' }, 
             body: JSON.stringify(payload)
         });
-        if (!response.ok) throw new Error('Błąd aktualizacji zawodnika');
         return response.json();
     },
 
-    async delete(id: string): Promise<void> {
-        const response = await fetch(`${API_URL}/${id}`, { 
+    async delete(id: string): Promise<Person> {  
+        const res = await fetch(`${API_URL}/${id}`, { 
             method: 'DELETE' 
         });
-        if (!response.ok) throw new Error('Błąd usuwania zawodnika');
+        return res.json();
     }
 };
