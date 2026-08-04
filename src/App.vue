@@ -1,16 +1,50 @@
 <script setup lang="ts">
 import Toast from 'primevue/toast';
+import Button from 'primevue/button';
+import { useRouter } from 'vue-router';
+import { useAuthStore } from '@/stores/userStore'; 
+
+const router = useRouter();
+const authStore = useAuthStore();
+
+const handleLogout = () => {
+    authStore.logout();
+    router.push({ name: 'login' });
+};
 </script>
 
 <template>
   <div class="app-layout">
     <nav class="navbar">
-      <h2 class="logo">Wybieracz Dat</h2>
-      <div class="links">
-        <router-link to="/">Kalendarz</router-link>
-        <router-link to="/historia">Historia</router-link>
-        <router-link to="/dashboard">Dashboard</router-link>
+      
+      <div class="navbar-left">
+        <h2 class="logo">Wybieracz Dat</h2>
       </div>
+      
+      <div class="navbar-center">
+        <div v-if="authStore.isAuthenticated" class="links">
+          <router-link to="/">Kalendarz</router-link>
+          <router-link to="/historia">Historia</router-link>
+          <router-link to="/dashboard">Dashboard</router-link>
+        </div>
+      </div>
+
+      <div class="navbar-right">
+        <div v-if="authStore.isAuthenticated" class="auth-section">
+          <span class="user-greeting">
+            Witaj, <strong>{{ authStore.currentUser }}</strong>!
+          </span>
+          <Button 
+            icon="pi pi-sign-out" 
+            label="Wyloguj" 
+            severity="danger" 
+            outlined 
+            size="small" 
+            @click="handleLogout" 
+          />
+        </div>
+      </div>
+
     </nav>
 
     <main class="page-content">
