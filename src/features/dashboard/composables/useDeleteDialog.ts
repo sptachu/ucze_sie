@@ -1,10 +1,10 @@
 import { useConfirm } from 'primevue/useconfirm';
-import { useToast } from 'primevue/usetoast';
+import { useAppToast } from '@/features/shared/composables/useAppToast';
 import  useDashboardPage  from '@/features/dashboard/composables/useDashboardPage';
 
 export function useDeleteUser() {
     const confirm = useConfirm();
-    const toast = useToast();
+    const {showSuccess, showError} = useAppToast();
     const { deletePerson } = useDashboardPage();
 
     const confirmDeletion = (id: string, firstName:string) => {
@@ -25,22 +25,10 @@ export function useDeleteUser() {
                 const isSuccess = await deletePerson(id);
 
                 if (isSuccess) {
-                    toast.add({ 
-                        severity: 'error', 
-                        summary: 'Usunięto', 
-                        detail: `Zawodnik ${firstName} został trwale usunięty z bazy.`, 
-                        life: 5000 
-                    });
-
+                    showSuccess('Usunięto',  `Zawodnik ${firstName} został trwale usunięty z bazy.`)
                     return
                 }
-
-                toast.add({ 
-                    severity: 'warn', 
-                    summary: 'Błąd', 
-                    detail: `Nie udało się usunąć zawodnika ${firstName}. Spróbuj ponownie.`, 
-                    life: 6000  // dodaj globalne ustwienie toastow - global composable
-                });
+                showError('Błąd', `Nie udało się usunąć zawodnika ${firstName}. Spróbuj ponownie.`)
                 
             }
         });

@@ -1,7 +1,7 @@
 import { ref, reactive, computed } from 'vue';
 import { Gender } from '@/stores/peopleStore';
 import type { User } from '@/stores/peopleStore';
-import { useToast } from 'primevue/usetoast';
+import { useAppToast } from '@/features/shared/composables/useAppToast'; 
 import  useDashboardPage  from '@/features/dashboard/composables/useDashboardPage'
 
 export type GenderOptions = {
@@ -11,7 +11,7 @@ export type GenderOptions = {
 
 export function useAddingDialog() {
     const { addPerson, updatePerson } = useDashboardPage();
-    const toast = useToast();
+    const {showSuccess, showError} = useAppToast();
     const isSubmitting = ref(false);
     
     const visible = ref(false);
@@ -69,10 +69,10 @@ export function useAddingDialog() {
         }
 
         if (isSuccess) {
-            toast.add({ severity: 'success', summary: 'Sukces', detail: 'Zapisano zawodnika!', life: 3000 });
+            showSuccess('sukces', 'zapisano zawodnika')
             closeDialog(); 
         } else {
-            toast.add({ severity: 'error', summary: 'Błąd', detail: 'Nie udało się zapisać. Sprawdź połączenie.', life: 4000 });
+            showError('Błąd','Nie udało się zapisać. Sprawdź połączenie.');
             isSubmitting.value = false;
         }
     };
