@@ -24,19 +24,13 @@
             </template>
 
             <template #loading>
-                <div class="flex flex-col items-center justify-center p-8">
-                    <i class="pi pi-spin pi-spinner text-4xl text-purple-500 mb-4"></i>
-                    <span class="text-xl font-bold text-gray-600">Pobieranie zawodników...</span>
-                </div>
+                <LoadingTableState message="Pobieranie zawodników..." />
             </template>
 
             <template #empty>
-                <div class="flex flex-col items-center justify-center p-8">
-                    <i class="pi pi-users text-4xl text-gray-400 mb-4"></i>
-                    <span class="text-xl font-bold text-gray-600 mb-2">Brak zawodników</span>
-                    <span class="text-gray-500 text-sm">Nie znaleziono żadnych rekordów do wyświetlenia.</span>
-                </div>
+                <EmptyTableState title="Brak zawodników" />
             </template>
+
             
             <Column field="firstName" sortable header="Imię" style="width: 25%"></Column>
             <Column field="lastName" sortable header="Nazwisko" style="width: 25%"></Column>
@@ -80,6 +74,8 @@ import useDashboard from '@/features/dashboard/composables/useDashboard';
 import { useAddingDialog } from '@/features/dashboard/composables/useAddingDialog';
 import { useDeleteUser } from '@/features/dashboard/composables/useDeleteDialog';
 import { useRandomPerson } from './composables/useRandomUser';
+import LoadingTableState from '@/features/shared/components/LoadingTableState.vue';
+import EmptyTableState from '@/features/shared/components/EmptyTableState.vue';
 
 const {peopleList, isLoading} = useDashboard()
 const { generateRandom } = useRandomPerson();
@@ -93,5 +89,4 @@ const filters = ref({
     global: { value: null, matchMode: 'contains' } 
 });
 
- // useDashboardPage i tam wszyskie crud z serwisu w kazdej funkcji lacze sie z serwisem i ogarniam dane. w usedashboardpage lacze sie tez z peoplestore. ten usedashboardpage ma zwracac cala tablice userow
 </script>

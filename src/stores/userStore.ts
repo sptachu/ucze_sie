@@ -1,0 +1,1 @@
+// zrobic prosty obiekt imie nazwisko i czy zalogowany. dodac strone z logowaniem
