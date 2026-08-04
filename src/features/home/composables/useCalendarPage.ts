@@ -9,7 +9,7 @@ export function useCalendarPage() {
     const loadCalendar = async () => {
         store.isLoading = true;
         try {
-            const data = (await calendarService.getAll()) as RangeAndNote[];
+            const data = await calendarService.getAll();
             store.setHistory(data);
             return true;
         } catch (error) {
