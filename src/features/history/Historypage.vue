@@ -2,7 +2,7 @@
   <div class="history-page">
     <h1 class="title">Historia zaznaczonych dat</h1>
     
-    <div v-if="calendarStore.savedHistory.length === 0" class="empty-state">
+    <div v-if="savedHistory.length === 0" class="empty-state">
       <p>Nie zapisałeś jeszcze żadnych zakresów dat.</p>
       <router-link to="/" class="back-link">Wróć do kalendarza</router-link>
     </div>
@@ -10,8 +10,8 @@
     <div v-else class="history-content">
       <ul class="history-list">
         <li 
-          v-for="(range, index) in calendarStore.savedHistory" 
-          :key="index"
+          v-for="(range, index) in savedHistory" 
+          :key="range.id"
           class="history-item"
         >
           <div class="item-header">Wybór #{{ index + 1 }}: {{ range.note || 'brak notatki' }}</div>
@@ -24,7 +24,7 @@
       </ul>
 
       <div class="actions">
-        <MainButton btn-type="mainBtn" @click="calendarStore.clearHistory">
+        <MainButton btn-type="mainBtn" @click="clearHistory">
           Wyczyść całą historię
         </MainButton>
       </div>
@@ -34,16 +34,16 @@
 
 <script setup>
 import { onMounted } from 'vue';
-import { useCalendarStore } from '@/stores/calendarStore';
+import { useCalendarPage } from '@/features/home/composables/useCalendarPage';
 import MainButton from '@/features/shared/components/MainButton.vue';
 import dateFormat from '../shared/utils/dateFormats';
 
 
-const calendarStore = useCalendarStore();
+const { savedHistory, loadCalendar, clearHistory } = useCalendarPage();
 const {toDateString} = dateFormat();
 
 onMounted(() => {
-    calendarStore.loadCalendar();
+    loadCalendar();
 });
 
 </script>

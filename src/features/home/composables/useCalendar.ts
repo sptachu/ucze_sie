@@ -1,5 +1,5 @@
 import { ref, reactive } from 'vue';
-import { useCalendarStore } from '@/stores/calendarStore';
+import { useCalendarPage } from '@/features/home/composables/useCalendarPage';
 import type { RangeAndNote } from '@/stores/calendarStore';
 
 type CalendarFormState = {
@@ -11,8 +11,7 @@ type CalendarFormState = {
 }
 
 export default function useCalendar() {
-    const calendarStore = useCalendarStore();
-    // todo zmien na osobne zmienne albo reactive i potestuj
+    const {addDateRange} = useCalendarPage();
     const formState = reactive<CalendarFormState>({
         dateRange: {
             start: new Date(),
@@ -22,12 +21,12 @@ export default function useCalendar() {
     });
 
     const handleSaveDateRange = () => {
-        const payload: RangeAndNote = {
+        const payload: Omit<RangeAndNote, 'id'> = {
             start: formState.dateRange.start.toISOString(),
             end: formState.dateRange.end.toISOString(),
             note: formState.note
         };
-        calendarStore.addDateRange(payload);
+        addDateRange(payload);
         formState.note = '';
         alert('Daty zostały pomyślnie zapisane w magazynie!');
     };
@@ -37,5 +36,5 @@ export default function useCalendar() {
     return {
         formState,
         handleSaveDateRange,
-    }
+    } 
 }

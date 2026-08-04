@@ -93,5 +93,4 @@ const filters = ref({
     global: { value: null, matchMode: 'contains' } 
 });
 
- // useDashboardPage i tam wszyskie crud z serwisu w kazdej funkcji lacze sie z serwisem i ogarniam dane. w usedashboardpage lacze sie tez z peoplestore. ten usedashboardpage ma zwracac cala tablice userow
 </script>
