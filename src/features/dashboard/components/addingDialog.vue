@@ -25,7 +25,7 @@
             
             <div class="flex flex-col sm:flex-row justify-end gap-2 mt-2">
                 <Button severity="secondary" @click="$emit('close')">Anuluj</Button>
-                <Button @click="$emit('save', localFormData)" :disabled="!isFormValid">{{ submitLabel }}</Button>
+                <Button @click="$emit('save', localFormData)" :disabled="!isFormValid" :loading="isSubmitting">{{ submitLabel }}</Button>
             </div>
             
         </div>
@@ -64,6 +64,7 @@ const props = defineProps<{
     genderOptions: GenderOptions[]; 
     dialogHeader: string;
     submitLabel: string;
+    isSubmitting: boolean;
 }>();
 
 const formatTime = () => {

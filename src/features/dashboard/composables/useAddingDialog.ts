@@ -1,7 +1,8 @@
 import { ref, reactive, computed } from 'vue';
-import { usePeopleStore, Gender } from '@/stores/peopleStore';
+import { Gender } from '@/stores/peopleStore';
 import type { User } from '@/stores/peopleStore';
-import { useToast } from 'primevue/usetoast';
+import { useAppToast } from '@/features/shared/composables/useAppToast'; 
+import  useDashboardPage  from '@/features/dashboard/composables/useDashboardPage'
 
 export type GenderOptions = {
     label:string,
@@ -9,8 +10,9 @@ export type GenderOptions = {
 }
 
 export function useAddingDialog() {
-    const peopleStore = usePeopleStore();
-    const toast = useToast();
+    const { addPerson, updatePerson } = useDashboardPage();
+    const {showSuccess, showError} = useAppToast();
+    const isSubmitting = ref(false);
     
     const visible = ref(false);
     const isEditMode = ref(false);
@@ -33,6 +35,7 @@ export function useAddingDialog() {
     const submitLabel = computed(() => isEditMode.value ? 'Zapisz zmiany' : 'Utwórz zawodnika');
 
     const openDialog = (user: User | null = null) => {
+        isSubmitting.value = false;
         if (user) {
             Object.assign(formData, {
                 id: user.id,
@@ -54,20 +57,23 @@ export function useAddingDialog() {
     };
 
     const savePerson = async (updatedData: User) => {
+        if (isSubmitting.value) return;
         let isSuccess = false; 
+        isSubmitting.value = true;
 
         if (isEditMode.value) {
-            isSuccess = await peopleStore.updatePerson(updatedData);
+            isSuccess = await updatePerson(updatedData);
         } else {
             const { id, ...newPersonData } = updatedData;
-            isSuccess = await peopleStore.addPerson(newPersonData);
+            isSuccess = await addPerson(newPersonData);
         }
 
         if (isSuccess) {
-            toast.add({ severity: 'success', summary: 'Sukces', detail: 'Zapisano zawodnika!', life: 3000 });
+            showSuccess('sukces', 'zapisano zawodnika')
             closeDialog(); 
         } else {
-            toast.add({ severity: 'error', summary: 'Błąd', detail: 'Nie udało się zapisać. Sprawdź połączenie.', life: 4000 });
+            showError('Błąd','Nie udało się zapisać. Sprawdź połączenie.');
+            isSubmitting.value = false;
         }
     };
 
@@ -77,6 +83,7 @@ export function useAddingDialog() {
         genderOptions,
         dialogHeader,
         submitLabel,
+        isSubmitting,
         openDialog,
         closeDialog,
         savePerson

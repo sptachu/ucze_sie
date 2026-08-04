@@ -1,5 +1,6 @@
-import { usePeopleStore, Gender } from '@/stores/peopleStore';
-import { useToast } from 'primevue/usetoast';
+import { Gender } from '@/stores/peopleStore';
+import { useAppToast } from '@/features/shared/composables/useAppToast';
+import  useDashboardPage  from '@/features/dashboard/composables/useDashboardPage'
 
 // Proste bazy danych do losowania
 const maleNames = ['Jan', 'Piotr', 'Kamil', 'Michał', 'Tomasz', 'Jakub', 'Maciej', 'Dawid'];
@@ -7,8 +8,8 @@ const femaleNames = ['Anna', 'Katarzyna', 'Magdalena', 'Julia', 'Zuzanna', 'Maja
 const lastNames = ['Kowalski', 'Nowak', 'Wiśniewski', 'Wójcik', 'Kowalczyk', 'Kamiński', 'Lewandowski', 'Zieliński'];
 
 export function useRandomPerson() {
-    const peopleStore = usePeopleStore();
-    const toast = useToast();
+    const { addPerson } = useDashboardPage();
+    const { showError, showSuccess } = useAppToast();
 
     const generateRandom = async () => {
         const isMale = Math.random() > 0.5;
@@ -34,23 +35,14 @@ export function useRandomPerson() {
             pb5k
         };
 
-        const isSuccess = await peopleStore.addPerson(newRandomPerson);
+        const isSuccess = await addPerson(newRandomPerson);
 
         if (isSuccess) {
-            toast.add({ 
-                severity: 'success', 
-                summary: 'Wylosowano', 
-                detail: `Dodano biegacza: ${firstName} ${lastName} (${pb5k})`, 
-                life: 3000 
-            });
-        } else {
-            toast.add({ 
-                severity: 'error', 
-                summary: 'Błąd', 
-                detail: 'Nie udało się zapisać losowego biegacza.', 
-                life: 3000 
-            });
-        }
+            showSuccess('Wylosowano', `Dodano biegacza: ${firstName} ${lastName} (${pb5k})`);
+            return // sprawdź early return
+        } 
+        
+        showError('Błąd', 'Nie udało się zapisać losowego biegacza.'); 
     };
 
     return { generateRandom };

@@ -130,4 +130,4 @@ onMounted(() => {
   justify-content: center;   
   margin-top: 2rem;          
 }
-</style>
+</style> // zmiana : tutaj zrobic analogicznie serwis itd jak w people
