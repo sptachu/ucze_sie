@@ -1,10 +1,10 @@
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
-import { useAuthStore } from '@/stores/userStore';
+import { useUserStore } from '@/stores/userStore';
 
 export function useLogin() {
     const router = useRouter();
-    const authStore = useAuthStore();
+    const userStore = useUserStore();
     
     const username = ref('');
     const password = ref('');
@@ -29,7 +29,7 @@ export function useLogin() {
                 );
 
                 if (foundUser) {
-                    authStore.login(foundUser.username);
+                    userStore.login(foundUser.username);
                     router.push('/'); 
                 } else {
                     errorMessage.value = 'Nieprawidłowy login lub hasło.';

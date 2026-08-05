@@ -3,7 +3,7 @@ import HomeView from '../views/HomeView.vue'
 import HistoryView from '../views/HistoryView.vue'
 import DashboardView from '@/views/DashboardView.vue'
 import LoginView from '../views/LoginView.vue' 
-import { useAuthStore } from '@/stores/userStore.ts'
+import { useUserStore } from '@/stores/userStore.ts'
 
 const router = createRouter({
   history: createWebHistory(),
@@ -31,18 +31,16 @@ const router = createRouter({
   ]
 })
 
-router.beforeEach((to, _from, next) => {
-  const authStore = useAuthStore();
+router.beforeEach((to) => {
+  const userStore = useUserStore();
   
-  if (to.name !== 'login' && !authStore.isAuthenticated) {
-    next({ name: 'login' }); 
-    return
+  if (to.name !== 'login' && !userStore.isAuthenticated) {
+    return { name: 'login' }; 
   } 
-  if (to.name === 'login' && authStore.isAuthenticated) {
-    next({ name: 'home' }); 
-    return
+  
+  if (to.name === 'login' && userStore.isAuthenticated) {
+    return { name: 'home' }; 
   } 
-  next(); 
   
 });
 
