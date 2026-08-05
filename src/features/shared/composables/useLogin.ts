@@ -24,16 +24,22 @@ export function useLogin() {
         errorMessage.value = '';
 
         try {
-                const response = await fetch('http://localhost:3001/users');// todo sprawdzic zeby porownywal z baza a nie poibieral wszystkich
+                const queryParams = new URLSearchParams({
+                    username: username.value
+                });
+
+                const response = await fetch(`http://localhost:3001/users?${queryParams.toString()}`);
                 const users = await response.json();
 
-                const foundUser = users.find(
-                    (u: any) => u.username === username.value && String(u.password) === String(password.value)
-                );
-
-                if (foundUser) {
-                    userStore.login(foundUser.username);
-                    router.push(ROUTES.HOME); 
+                if (users.length > 0) {
+                    const foundUser = users[0];
+                    
+                    if (String(foundUser.password) === String(password.value)) {
+                        userStore.login(foundUser.username);
+                        router.push(ROUTES.HOME); 
+                    } else {
+                        errorMessage.value = 'Nieprawidłowy login lub hasło.';
+                    }
                 } else {
                     errorMessage.value = 'Nieprawidłowy login lub hasło.';
                 }
