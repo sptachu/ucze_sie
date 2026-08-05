@@ -1,40 +1,39 @@
 <template>
-  <nav class="navbar">
-    
-    <div class="navbar-left">
-      <h2 class="logo">Wybieracz Dat</h2>
-    </div>
-    
-    <div class="navbar-center">
-      <div v-if="userStore.isAuthenticated" class="links">
-        <router-link to="/">Kalendarz</router-link>
-        <router-link to="/historia">Historia</router-link>
-        <router-link to="/dashboard">Dashboard</router-link>
+  <nav v-if="userStore.isAuthenticated" class="navbar">
+      <div class="navbar-left">
+        <h2 class="logo">Wybieracz Dat</h2>
       </div>
-    </div>
-
-    <div class="navbar-right">
-      <div v-if="userStore.isAuthenticated" class="auth-section">
-        <span class="user-greeting">
-          Witaj, <strong>{{ userStore.currentUser }}</strong>!
-        </span>
-        <Button 
-          icon="pi pi-sign-out" 
-          label="Wyloguj" 
-          severity="danger" 
-          outlined 
-          size="small" 
-          @click="handleLogout" 
-        />
+      
+      <div class="navbar-center">
+        <div  class="links">
+          <router-link :to='ROUTES.HOME'>Kalendarz</router-link>
+          <router-link :to='ROUTES.HISTORY'>Historia</router-link>
+          <router-link :to='ROUTES.DASHBOARD'>Dashboard</router-link>
+        </div>
       </div>
-    </div>
 
+      <div class="navbar-right">
+        <div  class="auth-section">
+          <span class="user-greeting">
+            Witaj, <strong>{{ userStore.currentUser }}</strong>!
+          </span>
+          <Button 
+            icon="pi pi-sign-out" 
+            label="Wyloguj" 
+            severity="danger" 
+            outlined 
+            size="small" 
+            @click="handleLogout" 
+          />
+        </div>
+      </div>
   </nav>
 </template>
 
 <script setup lang="ts">
 import Button from 'primevue/button';
 import { useNavbar } from '@/features/navbar/composables/useNavbar';
+import { ROUTES } from '@/router/index'
 
 const { userStore, handleLogout } = useNavbar();
 </script>

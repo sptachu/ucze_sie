@@ -1,16 +1,16 @@
 import { computed } from 'vue';
 import { useCalendarStore } from '@/stores/calendarStore';
-import { calendarService } from '@/features/shared/services/calendarService'; 
+import { calendarService } from '@/features/shared/services/calendar/calendarService'; 
 import type { RangeAndNote } from '@/stores/calendarStore';
 
-export function useCalendarPage() {
+export function useCalendarService() {
     const store = useCalendarStore();
 
     const loadCalendar = async () => {
         store.isLoading = true;
         try {
             const data = await calendarService.getAll();
-            store.setHistory(data);
+            store.setHistory(data);  
             return true;
         } catch (error) {
             console.error(error);
@@ -30,7 +30,7 @@ export function useCalendarPage() {
             
             await calendarService.create(payload);
             await loadCalendar(); 
-            return true;
+            return true;  
         } catch (error) {
             console.error(error);
             return false;
@@ -58,7 +58,6 @@ export function useCalendarPage() {
 
     return {
         savedHistory: computed(() => store.savedHistory),
-        isLoading: computed(() => store.isLoading),
         loadCalendar,
         addDateRange,
         clearHistory

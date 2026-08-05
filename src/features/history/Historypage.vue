@@ -34,12 +34,12 @@
 
 <script setup>
 import { onMounted } from 'vue';
-import { useCalendarPage } from '@/features/home/composables/useCalendarPage';
+import { useCalendarService } from '@/features/shared/data-access/useCalendarService';
 import MainButton from '@/features/shared/components/MainButton.vue';
 import dateFormat from '../shared/utils/dateFormats';
 
 
-const { savedHistory, loadCalendar, clearHistory } = useCalendarPage();
+const { savedHistory, loadCalendar, clearHistory } = useCalendarService();
 const {toDateString} = dateFormat();
 
 onMounted(() => {

@@ -13,7 +13,7 @@
 
 <script setup lang="ts">
 import Toast from 'primevue/toast';
-import AppNavbar from '@/features/navbar/components/AppNavbar.vue'; 
+import AppNavbar from '@/features/navbar/AppNavbar.vue'; 
 </script>
 
 <style scoped>

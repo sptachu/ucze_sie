@@ -1,5 +1,5 @@
 import { ref, reactive } from 'vue';
-import { useCalendarPage } from '@/features/home/composables/useCalendarPage';
+import { useCalendarService } from '@/features/shared/data-access/useCalendarService';
 import type { RangeAndNote } from '@/stores/calendarStore';
 
 type CalendarFormState = {
@@ -11,7 +11,7 @@ type CalendarFormState = {
 }
 
 export default function useCalendar() {
-    const {addDateRange} = useCalendarPage();
+    const {addDateRange} = useCalendarService();
     const formState = reactive<CalendarFormState>({
         dateRange: {
             start: new Date(),

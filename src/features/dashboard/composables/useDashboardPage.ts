@@ -84,7 +84,6 @@ export default function useDashboardPage() {
     onUnmounted(() => {
         if (timeoutId) {
             clearTimeout(timeoutId);
-            timeoutId = null;
         }
     });
 

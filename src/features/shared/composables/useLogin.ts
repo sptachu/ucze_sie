@@ -1,6 +1,9 @@
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { useUserStore } from '@/stores/userStore';
+import { ROUTES } from '@/router/index';
+
+// todo zrob obiekt user zeby nie uzywac tutaj any
 
 export function useLogin() {
     const router = useRouter();
@@ -21,7 +24,7 @@ export function useLogin() {
         errorMessage.value = '';
 
         try {
-                const response = await fetch('http://localhost:3001/users');
+                const response = await fetch('http://localhost:3001/users');// todo sprawdzic zeby porownywal z baza a nie poibieral wszystkich
                 const users = await response.json();
 
                 const foundUser = users.find(
@@ -30,7 +33,7 @@ export function useLogin() {
 
                 if (foundUser) {
                     userStore.login(foundUser.username);
-                    router.push('/'); 
+                    router.push(ROUTES.HOME); 
                 } else {
                     errorMessage.value = 'Nieprawidłowy login lub hasło.';
                 }
