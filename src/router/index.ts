@@ -4,13 +4,14 @@ import HistoryView from '../views/HistoryView.vue'
 import DashboardView from '@/views/DashboardView.vue'
 import LoginView from '../views/LoginView.vue' 
 import { useUserStore } from '@/stores/userStore'
+import { STORAGE_KEYS } from '@/features/shared/dict/storageKeys.js'
 
-export enum ROUTES {
-  HOME = '/',
-  HISTORY = '/historia',
-  DASHBOARD = '/dashboard',
-  LOGIN = '/login'
-} 
+export const ROUTES = {
+  HOME: '/',
+  HISTORY: '/historia',
+  DASHBOARD: '/dashboard',
+  LOGIN: '/login'
+} as const
 
 const router = createRouter({
   history: createWebHistory(),
@@ -41,8 +42,8 @@ const router = createRouter({
 router.beforeEach((to) => {
   const userStore = useUserStore();
   
-  const hasAuthToken = localStorage.getItem('isAuth') === 'true';
-  const hasUsername = !!localStorage.getItem('username'); 
+  const hasAuthToken = localStorage.getItem(STORAGE_KEYS.IS_AUTH) === 'true';
+  const hasUsername = !!localStorage.getItem(STORAGE_KEYS.USERNAME); 
 
   if (!hasAuthToken || !hasUsername) {
     userStore.logout(); 

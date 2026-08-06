@@ -2,6 +2,7 @@ import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { useUserStore } from '@/stores/userStore';
 import { ROUTES } from '@/router/index';
+import { API } from '../dict/storageKeys';
 
 // todo zrob obiekt user zeby nie uzywac tutaj any
 
@@ -28,7 +29,7 @@ export function useLogin() {
                     username: username.value
                 });
 
-                const response = await fetch(`http://localhost:3001/users?${queryParams.toString()}`);
+                const response = await fetch(`${API.BASE_URL}${API.USERS}?${queryParams.toString()}`);
                 const users = await response.json();
 
                 if (users.length > 0) {

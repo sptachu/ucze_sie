@@ -1,4 +1,3 @@
-// zmiana: tutaj dodac strone logowania
 <template>
     <div class="min-h-screen flex items-center justify-center bg-gray-100">
         <Card class="w-full max-w-md shadow-lg">
