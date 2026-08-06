@@ -1,4 +1,4 @@
-import { computed } from 'vue';
+import { computed, onUnmounted } from 'vue';
 import { usePeopleStore } from '@/stores/peopleStore';
 import { peopleService } from '@/features/shared/services/peopleService';
 import type { Person, User } from '@/stores/peopleStore';
@@ -6,10 +6,21 @@ import type { Person, User } from '@/stores/peopleStore';
 export default function useDashboardPage() {
     const store = usePeopleStore();
 
+    let timeoutId: ReturnType<typeof setTimeout> | null = null;
+
     const loadPeople = async () => {
         store.isLoading = true;
         try {
-            //await new Promise(resolve => setTimeout(resolve, 2000)); 
+            if (timeoutId) {
+                clearTimeout(timeoutId);
+            }
+
+            await new Promise<void>((resolve) => {
+                timeoutId = setTimeout(() => {
+                    timeoutId = null; 
+                    resolve();        
+                }, 2000);
+            });
             const data = await peopleService.getAll();
             store.setPeople(data);
             return true;
@@ -68,6 +79,12 @@ export default function useDashboardPage() {
             ...person,
             fullName: `${person.firstName} ${person.lastName}` 
         }));
+    });
+
+    onUnmounted(() => {
+        if (timeoutId) {
+            clearTimeout(timeoutId);
+        }
     });
 
     return {

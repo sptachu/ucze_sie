@@ -1,4 +1,3 @@
-// zmiana: tutaj dodac strone logowania
 <template>
     <div class="min-h-screen flex items-center justify-center bg-gray-100">
         <Card class="w-full max-w-md shadow-lg">
@@ -10,12 +9,12 @@
                     
                     <div class="flex flex-col gap-1">
                         <label for="username" class="font-semibold">Nazwa użytkownika</label>
-                        <InputText id="username" v-model="username" placeholder="Wpisz login" autofocus />
+                        <InputText id="username" v-model="credentials.username" placeholder="Wpisz login" autofocus />
                     </div>
                     
                     <div class="flex flex-col gap-1">
                         <label for="password" class="font-semibold">Hasło</label>
-                        <Password id="password" v-model="password" :feedback="false" toggleMask placeholder="Wpisz hasło" />
+                        <Password id="password" v-model="credentials.password" :feedback="false" toggleMask placeholder="Wpisz hasło" />
                     </div>
 
                     <small v-if="errorMessage" class="text-red-500 text-center">{{ errorMessage }}</small>
@@ -34,5 +33,5 @@ import Password from 'primevue/password';
 import Button from 'primevue/button';
 import { useLogin } from '@/features/shared/composables/useLogin'; 
 
-const { username, password, errorMessage, isLoading, handleLogin } = useLogin();
+const { credentials, errorMessage, isLoading, handleLogin } = useLogin();
 </script>

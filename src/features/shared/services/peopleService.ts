@@ -1,6 +1,7 @@
 import type { Person} from '@/stores/peopleStore';
+import { API } from '../dict/storageKeys';
 
-const API_URL = 'http://localhost:3001/people';
+const API_URL = `${API.BASE_URL}${API.PEOPLE}`;
 
 export const peopleService = {
     async getAll(): Promise<Person[]> {

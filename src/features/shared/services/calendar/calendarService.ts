@@ -1,6 +1,7 @@
 import type { RangeAndNote } from '@/stores/calendarStore';
+import { API } from '../../dict/storageKeys';
 
-const API_URL = 'http://localhost:3001/calendar';
+const API_URL = `${API.BASE_URL}${API.CALENDAR}`;
 
 export const calendarService = {
     async getAll(): Promise<RangeAndNote[]> {
