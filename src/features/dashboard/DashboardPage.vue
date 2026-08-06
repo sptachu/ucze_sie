@@ -1,8 +1,14 @@
 <template>
     <div>
-        <div class="flex justify-center mb-6 gap-3">
-            <Button label="Wylosuj randoma" icon="pi pi-sparkles" severity="help" @click="generateRandom()" />
-            <Button label="Dodaj osobę" icon="pi pi-user-plus" @click="openDialog()" />
+        <div class="flex justify-end items-center gap-40 mb-4">
+            <div class="flex">
+                <InputText v-model="filters['global'].value" placeholder="Szukaj zawodnika..." />
+            </div>
+            
+            <div class="flex justify-center gap-3">
+                <Button label="Wylosuj randoma" icon="pi pi-sparkles" severity="help" @click="generateRandom()" />
+                <Button label="Dodaj osobę" icon="pi pi-user-plus" @click="openDialog()" />
+            </div>
         </div>
 
         <DataTable 
@@ -15,13 +21,9 @@
             tableStyle="min-width: 50rem" 
             emptyMessage="Brak zawodników." 
             v-model:filters="filters"
-            :globalFilterFields="['firstName', 'lastName', 'fullName']">
+            :globalFilterFields="['firstName', 'lastName', 'fullName']"
+            filterDisplay="row">
 
-            <template #header>
-                <div class="flex justify-center">
-                    <InputText v-model="filters['global'].value" placeholder="Szukaj zawodnika..." />
-                </div>
-            </template>
 
             <template #loading>
                 <LoadingTableState message="Pobieranie zawodników..." />
@@ -33,8 +35,29 @@
 
             
             <Column field="firstName" sortable header="Imię" style="width: 25%"></Column>
-            <Column field="lastName" sortable header="Nazwisko" style="width: 25%"></Column>
-            <Column field="gender" sortable header="Płeć" style="width: 20%"></Column>
+            <Column field="lastName" sortable header="Nazwisko" style="width: 25%">
+                <template #filter="{ filterModel, filterCallback }">
+                    <InputText 
+                        v-model="filterModel.value" 
+                        type="text" 
+                        @input="filterCallback()" 
+                        placeholder="Szukaj nazwiska..." 
+                    />
+                </template>
+            </Column>
+            <Column field="gender" sortable header="Płeć" style="width: 20%">
+                <template #filter="{ filterModel, filterCallback }">
+                    <Select 
+                        v-model="filterModel.value" 
+                        :options="genderOptions" 
+                        optionLabel="label"
+                        optionValue="value"
+                        placeholder="Wybierz..." 
+                        @change="filterCallback()" 
+                        showClear 
+                    />
+                </template>
+            </Column>
             <Column field="pb5k" sortable header="PB (5km)" style="width: 15%"></Column>
 
             <Column header="Akcje" style="width: 15%">
@@ -67,6 +90,7 @@ import { ref } from 'vue';
 import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
 import Button from 'primevue/button';
+import Select from 'primevue/select';
 import InputText from 'primevue/inputtext';
 import AddingDialog from '@/features/dashboard/components/AddingDialog.vue';
 import DeleteDialog from '@/features/dashboard/components/DeleteDialog.vue';
@@ -85,9 +109,14 @@ const {
     submitLabel, openDialog, closeDialog, savePerson, isSubmitting
 } = useAddingDialog();
 
+
 const filters = ref({
-    global: { value: null, matchMode: 'contains' } 
-}); // todo zeby sie na nakladalo ladowanie i brak zawodnikow i jak zrobic zeby ctrl / robilo komentarz
+    global: { value: null, matchMode: 'contains' },
+    lastName: {value: null, matchMode: 'startsWith'},
+    gender: {value: null, matchMode: 'equals'}
+}); 
+
+// todo zeby sie na nakladalo ladowanie i brak zawodnikow i jak zrobic zeby ctrl / robilo komentarz
 // dodaj jakis wykers z chartjs z najlepszymi zawodnikami albo wykres jakie czasy robią na koniec
 // dodac kolumny keidy stworzno rekord i kiedy zmodyfikowane
 // zmien uklad na gorze |wyszukiwaarka   {odstęp}        buttony|
