@@ -1,5 +1,5 @@
 <template>
-  <nav v-if="userStore.isAuthenticated" class="navbar">
+  <nav v-if="userStore.currentUser.isAuthenticated" class="navbar">
       <div class="navbar-left">
         <h2 class="logo">Wybieracz Dat</h2>
       </div>
@@ -15,7 +15,7 @@
       <div class="navbar-right">
         <div  class="auth-section">
           <span class="user-greeting">
-            Witaj, <strong>{{ userStore.currentUser }}</strong>!
+            Witaj, <strong>{{ userStore.currentUser.nickname }}</strong>!
           </span>
           <Button 
             icon="pi pi-sign-out" 

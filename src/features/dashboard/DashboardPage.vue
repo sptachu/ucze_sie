@@ -28,7 +28,7 @@
             </template>
 
             <template #empty>
-                <EmptyTableState title="Brak zawodników" />
+                <EmptyTableState :isLoading="isLoading" title="Brak zawodników" />
             </template>
 
             
