@@ -49,11 +49,11 @@ router.beforeEach((to) => {
     userStore.logout(); 
   }
 
-  if (to.name !== 'login' && (!userStore.isAuthenticated || !hasAuthToken || !hasUsername)) {
+  if (to.name !== 'login' && (!userStore.currentUser.isAuthenticated || !hasAuthToken || !hasUsername)) {
     return { name: 'login' }; 
   } 
   
-  if (to.name === 'login' && userStore.isAuthenticated && hasAuthToken && hasUsername) {
+  if (to.name === 'login' && userStore.currentUser.isAuthenticated && hasAuthToken && hasUsername) {
     return { name: 'home' }; 
   } 
 });
