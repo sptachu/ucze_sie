@@ -58,11 +58,19 @@
                     />
                 </template>
             </Column>
-            <Column field="pb5k" sortable header="PB (5km)" style="width: 15%"></Column>
+            <Column field="dateOfBirth" sortable header="data urodzenia" style="width: 15%"></Column>
 
             <Column header="Akcje" style="width: 15%">
                 <template #body="{ data }">
                     <div class="flex gap-3 justify-center">
+                        <Button 
+                            icon="pi pi-chart-bar" 
+                            severity="info" 
+                            outlined 
+                            rounded 
+                            v-tooltip="'Profil i wyniki'"
+                            @click="goToResults(data.id)" 
+                        />
                         <Button icon="pi pi-pencil" outlined rounded @click="openDialog(data)" />
                         <Button icon="pi pi-trash" severity="danger" outlined rounded @click="confirmDeletion(data.id, data.firstName)" />
                     </div>
@@ -91,6 +99,7 @@ import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
 import Button from 'primevue/button';
 import Select from 'primevue/select';
+import Tooltip from 'primevue/tooltip';
 import InputText from 'primevue/inputtext';
 import AddingDialog from '@/features/dashboard/components/AddingDialog.vue';
 import DeleteDialog from '@/features/dashboard/components/DeleteDialog.vue';
@@ -100,7 +109,10 @@ import { useDeleteUser } from '@/features/dashboard/composables/useDeleteDialog'
 import { useRandomPerson } from './composables/useRandomUser';
 import LoadingTableState from '@/features/shared/components/LoadingTableState.vue';
 import EmptyTableState from '@/features/shared/components/EmptyTableState.vue';
+import { useRouter } from 'vue-router'; 
 
+const vTooltip = Tooltip;
+const router = useRouter();
 const {peopleList, isLoading} = useDashboard()
 const { generateRandom } = useRandomPerson();
 const { confirmDeletion } = useDeleteUser();
@@ -115,6 +127,10 @@ const filters = ref({
     lastName: {value: null, matchMode: 'startsWith'},
     gender: {value: null, matchMode: 'equals'}
 }); 
+
+const goToResults = (id: string) => {
+    router.push(`/results/${id}`);
+};
 
 // todo zeby sie na nakladalo ladowanie i brak zawodnikow i jak zrobic zeby ctrl / robilo komentarz
 // dodaj jakis wykers z chartjs z najlepszymi zawodnikami albo wykres jakie czasy robią na koniec

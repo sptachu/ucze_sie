@@ -9,5 +9,6 @@ export const API = {
     
     USERS: '/users',
     PEOPLE: '/people',
-    CALENDAR: '/calendar'
+    CALENDAR: '/calendar',
+    RESULTS: '/results'
 } as const;

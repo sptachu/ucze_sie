@@ -2,13 +2,27 @@
 import { DatePicker } from 'v-calendar';
 import 'v-calendar/style.css'
 
+const props = defineProps({
+    isRange: {
+        type: Boolean,
+        default: false 
+    }
+});
+
 const choseDate = defineModel();
 </script>
 
 <template>
   <div class="calendar-card">
     <h2 class="top-text">Wybierz datę</h2>
-    <DatePicker v-model="choseDate" is-range/>
+    <DatePicker 
+      v-model="choseDate" 
+      :is-range="isRange"
+    >
+      <template v-if="$slots.default" #default="slotProps">
+            <slot v-bind="slotProps"></slot>
+        </template>
+    </DatePicker>
   </div>
 </template>
 

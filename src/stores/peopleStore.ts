@@ -12,9 +12,9 @@ export interface Person {
     firstName: string;
     lastName: string;
     gender: Gender;
-    pb5k: string;
     createdAt: string; 
     updatedAt: string;
+    dateOfBirth: string;
 }
 
 export type User = Omit<Person, 'createdAt' | 'updatedAt'>;

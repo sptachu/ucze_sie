@@ -1,7 +1,7 @@
 <template>
   <main>
     <div class="action-container">
-        <MyCalendar v-model="formState.dateRange" />
+        <MyCalendar v-model="formState.dateRange" is-range />
 
         <div class="note-section">
             <label for="date-note">Dodaj notatkę (opcjonalnie):</label>
@@ -25,7 +25,7 @@
 </template>
 
 <script setup lang="ts">
-  import MyCalendar from '@/features/home/components/MyCalendar.vue';
+  import MyCalendar from '@/features/shared/components/MyCalendar.vue';
   import MainButton from '@/features/shared/components/MainButton.vue';
   import useCalendar from './composables/useCalendar';
   const {formState, handleSaveDateRange} = useCalendar();

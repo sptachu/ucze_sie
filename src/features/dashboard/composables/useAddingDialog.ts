@@ -22,7 +22,7 @@ export function useAddingDialog() {
         firstName: '',
         lastName: '',
         gender: Gender.MALE,
-        pb5k: ''
+        dateOfBirth: ''
     });
 
     const genderOptions = ref<GenderOptions[]>([
@@ -42,11 +42,11 @@ export function useAddingDialog() {
                 firstName: user.firstName,
                 lastName: user.lastName,
                 gender: user.gender,
-                pb5k: user.pb5k
+                dateOfBirth: user.dateOfBirth
             }); 
             isEditMode.value = true;
         } else {
-            Object.assign(formData, { id: '', firstName: '', lastName: '', gender: Gender.MALE, pb5k: '' }); 
+            Object.assign(formData, { id: '', firstName: '', lastName: '', gender: Gender.MALE, dateOfBirth: '' }); 
             isEditMode.value = false;
         }
         visible.value = true;

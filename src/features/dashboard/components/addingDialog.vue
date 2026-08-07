@@ -17,10 +17,23 @@
                 <label for="gender" class="text-sm font-semibold">Płeć</label>
                 <Select id="gender" v-model="localFormData.gender" :options="genderOptions" optionLabel="label" optionValue="value" placeholder="Wybierz płeć" />
             </div>
-            
+             
+
             <div class="flex flex-col gap-1">
-                <label for="pb5k" class="text-sm font-semibold">PB (5km)</label>
-                <InputText id="pb5k" v-model="localFormData.pb5k" @keydown="blockInvalidChars" @input="formatTime" placeholder="np. 19:45" maxlength="5" />           
+                <label for="dateOfBirth">Data urodzenia</label>
+    
+            <MyCalendar v-model="rawDate" :is-range="false">
+                <template #default="{ inputValue, inputEvents }">
+                    <InputText 
+                        id="dateOfBirth"
+                        :value="inputValue" 
+                        v-on="inputEvents" 
+                        readonly 
+                        placeholder="Wybierz z kalendarza..."
+                        class="cursor-pointer bg-white" 
+                    />
+                </template>
+            </MyCalendar>
             </div>
             
             <div class="flex flex-col sm:flex-row justify-end gap-2 mt-2">
@@ -40,23 +53,9 @@ import Button from 'primevue/button';
 import { ref, watch, computed } from 'vue';
 import type { GenderOptions } from '../composables/useAddingDialog';
 import type { User } from '@/stores/peopleStore'
+import MyCalendar from '@/features/shared/components/MyCalendar.vue';
 
-const blockInvalidChars = (event: KeyboardEvent) => {
-    const allowedKeys = ['Backspace', 'Delete', 'Tab', 'ArrowLeft', 'ArrowRight'];
-    if (allowedKeys.includes(event.key)) {
-        return;
-    }
-
-    if (!/^\d$/.test(event.key)) {
-        event.preventDefault();
-    }
-};
-
-const isFormValid = computed(() => {
-    return localFormData.value.firstName.trim().length > 0 && 
-           localFormData.value.lastName.trim().length > 0 &&
-           localFormData.value.pb5k.trim().length == 5;
-});
+const rawDate = ref<Date | null>(null);
 
 const props = defineProps<{
     visible: boolean;
@@ -67,15 +66,7 @@ const props = defineProps<{
     isSubmitting: boolean;
 }>();
 
-const formatTime = () => {
-    let val = localFormData.value.pb5k ? localFormData.value.pb5k.replace(/\D/g, '') : '';
-    
-    if (val.length > 2) {
-        val = val.substring(0, 2) + ':' + val.substring(2, 4);
-    }
-    
-    localFormData.value.pb5k = val;
-};
+
 
 defineEmits(['update:visible', 'close', 'save']);
 
@@ -86,9 +77,33 @@ watch(
     (isVisible) => {
         if (isVisible) {
             localFormData.value = { ...props.formData };
+            
+            if (props.formData.dateOfBirth) {
+                rawDate.value = new Date(props.formData.dateOfBirth);
+            } else {
+                rawDate.value = null; 
+            }
         }
     },
     { immediate: true }
 );
+
+watch(rawDate, (newVal) => {
+    if (newVal) {
+        const year = newVal.getFullYear();
+        const month = String(newVal.getMonth() + 1).padStart(2, '0');
+        const day = String(newVal.getDate()).padStart(2, '0');
+        
+        localFormData.value.dateOfBirth = `${year}-${month}-${day}`;
+    } else {
+        localFormData.value.dateOfBirth = '';
+    }
+});
+
+const isFormValid = computed(() => {
+    return localFormData.value.firstName.trim().length > 0 && 
+           localFormData.value.lastName.trim().length > 0 &&
+           localFormData.value.dateOfBirth.length === 10; 
+});
 
 </script>

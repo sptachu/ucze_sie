@@ -24,21 +24,32 @@ export function useRandomPerson() {
             lastName = lastName.slice(0, -1) + 'a'; 
         }
 
-        const minutes = Math.floor(Math.random() * (35 - 14 + 1)) + 14;
-        const seconds = Math.floor(Math.random() * 60);
-        const pb5k = `${minutes}:${seconds.toString().padStart(2, '0')}`; // padStart dodaje zero, np. 15:05 zamiast 15:5
+        const getRandomDateOfBirth = (): string => {
+            const start = new Date(1950, 0, 1).getTime();
+            const end = new Date(2005, 11, 31).getTime();
+            
+            const randomDate = new Date(start + Math.random() * (end - start));
+            
+            const year = randomDate.getFullYear();
+            const month = String(randomDate.getMonth() + 1).padStart(2, '0');
+            const day = String(randomDate.getDate()).padStart(2, '0');
+            
+            return `${year}-${month}-${day}`;
+        };
+        
+        const dateOfBirth = getRandomDateOfBirth();
 
         const newRandomPerson = {
             firstName,
             lastName,
             gender,
-            pb5k
+            dateOfBirth
         };
 
         const isSuccess = await addPerson(newRandomPerson);
 
         if (isSuccess) {
-            showSuccess('Wylosowano', `Dodano biegacza: ${firstName} ${lastName} (${pb5k})`);
+            showSuccess('Wylosowano', `Dodano biegacza: ${firstName} ${lastName} (${dateOfBirth})`);
             return // sprawdź early return
         } 
         

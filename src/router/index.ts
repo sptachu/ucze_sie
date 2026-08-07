@@ -3,6 +3,7 @@ import HomeView from '../views/HomeView.vue'
 import HistoryView from '../views/HistoryView.vue'
 import DashboardView from '@/views/DashboardView.vue'
 import LoginView from '../views/LoginView.vue' 
+import ResultsView from '../views/ResultsView.vue'
 import { useUserStore } from '@/stores/userStore'
 import { STORAGE_KEYS } from '@/features/shared/dict/storageKeys.js'
 
@@ -10,7 +11,8 @@ export const ROUTES = {
   HOME: '/',
   HISTORY: '/historia',
   DASHBOARD: '/dashboard',
-  LOGIN: '/login'
+  LOGIN: '/login',
+  RESULTS: '/results/:id'
 } as const
 
 const router = createRouter({
@@ -35,7 +37,12 @@ const router = createRouter({
       path: ROUTES.DASHBOARD,
       name: 'dashboard',
       component: DashboardView
-    }
+    },
+    {
+      path: ROUTES.RESULTS,
+      name: 'results',
+      component: ResultsView
+    },
   ]
 })
 
