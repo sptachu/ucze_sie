@@ -102,7 +102,7 @@ import Select from 'primevue/select';
 import Tooltip from 'primevue/tooltip';
 import InputText from 'primevue/inputtext';
 import AddingDialog from '@/features/dashboard/components/AddingDialog.vue';
-import DeleteDialog from '@/features/dashboard/components/DeleteDialog.vue';
+import DeleteDialog from '@/features/shared/components/DeleteDialog.vue';
 import useDashboard from '@/features/dashboard/composables/useDashboard';
 import { useAddingDialog } from '@/features/dashboard/composables/useAddingDialog';
 import { useDeleteUser } from '@/features/dashboard/composables/useDeleteDialog';

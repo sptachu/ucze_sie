@@ -47,8 +47,8 @@
                     <EmptyTableState  title="Brak wyników"  description="Nie znaleziono żadnych wyników do wyświetlenia"/>
                 </template>
 
-                <Column field="date" header="Data startu" sortable></Column>
-                <Column field="activityType" header="Dyscyplina" sortable>
+                <Column field="date" header="Data startu" sortable style="width: 15%"></Column>
+                <Column field="activityType" header="Dyscyplina" sortable style="width: 5%">
                     <template #body="{ data }">
                         <Tag 
                             :value="data.activityType" 
@@ -56,11 +56,19 @@
                         />
                     </template>
                 </Column>
-                <Column field="distance" header="Dystans"></Column>
-                <Column field="time" header="Czas" sortable class="font-bold"></Column>
-                <Column field="startLocation" header="Start"></Column>
-                <Column field="endLocation" header="Meta"></Column>
-                <Column field="equipment" header="Sprzęt"></Column>
+                <Column field="distance" header="Dystans" style="width: 10%"></Column>
+                <Column field="time" header="Czas" sortable class="font-bold" style="width: 15%"></Column>
+                <Column field="startLocation" header="Start" style="width: 15%"></Column>
+                <Column field="endLocation" header="Meta" style="width: 15%"></Column>
+                <Column field="equipment" header="Sprzęt" style="width: 15%"></Column>
+                <Column header="Akcje" style="width: 10%">
+                    <template #body="{ data }">
+                        <div class="flex gap-3 justify-center">
+                            <Button icon="pi pi-pencil" outlined rounded @click="openResultDialog(data)" />
+                            <Button icon="pi pi-trash" severity="danger" outlined rounded @click="confirmResultDeletion(data.id)" />
+                        </div>
+                    </template>
+                </Column>
             </DataTable>
         </div>
     </div>
@@ -76,6 +84,7 @@
         @close="closeDialog"
         @save="saveResult"
     />
+    <DeleteDialog />
 </template>
 
 <script setup lang="ts">
@@ -84,10 +93,12 @@ import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
 import Button from 'primevue/button';
 import Tag from 'primevue/tag';
+import DeleteDialog from '@/features/shared/components/DeleteDialog.vue';
 import { usePersonResults } from './composables/useResults';
 import EmptyTableState from '@/features/shared/components/EmptyTableState.vue';
 import { useAddingResultDialog } from './composables/useAddingResultDialog';
 import AddingResultDialog from './components/AddingResultDialog.vue';
+import { useDeleteResult } from '@/features/resultsHistory/composables/useDeleteResult';
 
 const { 
     personInfoTable, 
@@ -99,6 +110,8 @@ const {
 const { visible, formData, activityOptions,distanceOptions, dialogHeader, submitLabel, isSubmitting, openResultDialog, closeDialog, saveResult } = useAddingResultDialog(personId);
 
 const router = useRouter();
+
+const { confirmResultDeletion } = useDeleteResult();
 
 
 </script>
