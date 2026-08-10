@@ -6,36 +6,12 @@ import type { Person, User } from '@/stores/peopleStore';
 export default function useDashboardPage() {
     const store = usePeopleStore();
 
-    let timeoutId: ReturnType<typeof setTimeout> | null = null;
 
-    const loadPeople = async () => {
-        store.isLoading = true;
-        try {
-            if (timeoutId) {
-                clearTimeout(timeoutId);
-            }
-
-            await new Promise<void>((resolve) => {
-                timeoutId = setTimeout(() => {
-                    timeoutId = null; 
-                    resolve();        
-                }, 2000);
-            });
-            const data = await peopleService.getAll();
-            store.setPeople(data);
-            return true;
-        } catch (error) {
-            console.error('Błąd w loadPeople:', error);
-            return false;
-        } finally {
-            store.isLoading = false;
-        }
-    };
 
     const addPerson = async (personData: Omit<Person, 'id' | 'createdAt' | 'updatedAt'>) => {
         try {
             await peopleService.create(personData);
-            await loadPeople(); 
+            await store.loadPeople(); 
             return true;
         } catch (error) {
             console.error('Błąd w addPerson:', error);
@@ -55,7 +31,7 @@ export default function useDashboardPage() {
             };
 
             await peopleService.update(updatedUser.id, payload);
-            await loadPeople(); 
+            await store.loadPeople(); 
             return true;
         } catch (error) {
             console.error('Błąd w updatePerson:', error);
@@ -66,7 +42,7 @@ export default function useDashboardPage() {
     const deletePerson = async (id: string) => {
         try {
             await peopleService.delete(id);
-            await loadPeople(); 
+            await store.loadPeople(); 
             return true;
         } catch (error) {
             console.error('Błąd w deletePerson:', error);
@@ -81,18 +57,12 @@ export default function useDashboardPage() {
         }));
     });
 
-    onUnmounted(() => {
-        if (timeoutId) {
-            clearTimeout(timeoutId);
-        }
-    });
 
     return {
         peopleList,
         isLoading: computed(() => store.isLoading),
-        loadPeople,
         addPerson,
         updatePerson,
-        deletePerson
+        deletePerson,
     };
 }

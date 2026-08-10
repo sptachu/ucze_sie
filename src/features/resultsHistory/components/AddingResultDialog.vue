@@ -172,7 +172,6 @@ const handleSave = () => {
         const rawValue = timeStr.replace(/\D/g, '');
         let sec = 0, min = 0, hr = 0;
 
-        // Odczytujemy wpisane wartości
         if (rawValue.length <= 2) {
             sec = parseInt(rawValue, 10) || 0;
         } else if (rawValue.length <= 4) {

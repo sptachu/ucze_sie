@@ -1,31 +1,45 @@
 import { computed, onMounted } from 'vue';
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 import { ActivityType } from '@/stores/resultsStore';
 import { usePeopleStore } from '@/stores/peopleStore';
 import { useResultsPage } from '@/features/resultsHistory/composables/useResultsPage';
+import { useAppToast } from '@/features/shared/composables/useAppToast'; 
+import { ROUTES } from '@/router';
 
 export function usePersonResults() {
     const route = useRoute();
+    const router = useRouter();
     const personId = route.params.id as string;
 
-    const { peopleList } = usePeopleStore();
+    const  peopleStore  = usePeopleStore();
     const { getPersonRecords, loadAllRecords } = useResultsPage();
+    const { showError } = useAppToast();
 
     const personRecords = getPersonRecords(personId);
 
     onMounted(async () => {
+        if (peopleStore.peopleList.length === 0) {
+            await peopleStore.loadPeople(); 
+        }
+        const exists = peopleStore.peopleList.some(p => p.id === personId);
+        
+        if (!exists) {
+            showError('Błąd', 'Zawodnik o podanym ID nie istnieje.');
+            router.replace(ROUTES.DASHBOARD); 
+            return; 
+        }
         await loadAllRecords();
     });
 
 
     const person = computed(() => {
-        return peopleList.find(p => p.id === personId) || null;
+        return peopleStore.peopleList.find(p => p.id === personId) || null;
     });
 
     const calculateAge = (dob?: string) => {
         if (!dob) return '-';
         const birthYear = new Date(dob).getFullYear();
-        return 2026 - birthYear; 
+        return new Date().getFullYear() - birthYear; 
     };
 
     const preferredSport = computed(() => {
@@ -50,6 +64,20 @@ export function usePersonResults() {
         ];
     });
 
+    const timeToSeconds = (timeStr: string) => {
+        const parts = timeStr.split(':').map(Number);
+        
+        if (parts.length === 3) {
+            return parts[0] * 3600 + parts[1] * 60 + parts[2]; 
+        } else if (parts.length === 2) {
+            return parts[0] * 60 + parts[1]; 
+        } else if (parts.length === 1) {
+            return parts[0] || 0; 
+        }
+        
+        return 0; 
+    };
+
     const personalBests = computed(() => {
         const records = personRecords.value;
         if (!records || records.length === 0) return [];
@@ -60,12 +88,12 @@ export function usePersonResults() {
             const runTimes = records
                 .filter(r => r.distance === dist && r.activityType === ActivityType.RUN)
                 .map(r => r.time)
-                .sort();
+                .sort((a, b) => timeToSeconds(a) - timeToSeconds(b));
             
             const bikeTimes = records
                 .filter(r => r.distance === dist && r.activityType === ActivityType.BIKE)
                 .map(r => r.time)
-                .sort();
+                .sort((a, b) => timeToSeconds(a) - timeToSeconds(b));
 
             return {
                 distance: dist,

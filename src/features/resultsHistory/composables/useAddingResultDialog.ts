@@ -13,6 +13,17 @@ export type ActivityOptions = {
     value: ActivityType | string
 }
 
+const defaultResultState = {
+    id: '',
+    date: '',
+    activityType: ActivityType.RUN, 
+    distance: '',
+    time: '',
+    startLocation: '',
+    endLocation: '',
+    equipment: ''
+};
+
 export function useAddingResultDialog(personId: string) {
     const { createRecord, editRecord } = useResultsPage(); 
     const { showSuccess } = useAppToast();
@@ -22,15 +33,8 @@ export function useAddingResultDialog(personId: string) {
     const isEditMode = ref(false);
     
     const formData = reactive<ResultRecord>({
-        id: '',
-        personId: personId, 
-        date: '',
-        activityType: ActivityType.RUN, 
-        distance: '',
-        time: '',
-        startLocation: '',
-        endLocation: '',
-        equipment: ''
+        ...defaultResultState,
+        personId: personId
     });
 
     const distanceOptions = ref<DistanceOptions[]>([
@@ -61,16 +65,9 @@ export function useAddingResultDialog(personId: string) {
             isEditMode.value = true;
         } else {
             Object.assign(formData, { 
-                id: '', 
-                personId: personId, 
-                date: '', 
-                activityType: 'Bieg', 
-                distance: '', 
-                time: '', 
-                startLocation: '', 
-                endLocation: '', 
-                equipment: '' 
-            }); 
+                ...defaultResultState, 
+                personId: personId 
+            });
             isEditMode.value = false;
         }
         visible.value = true;
