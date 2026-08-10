@@ -4,7 +4,7 @@ import { ActivityType } from '@/stores/resultsStore';
 import { usePeopleStore } from '@/stores/peopleStore';
 import { useResultsPage } from '@/features/resultsHistory/composables/useResultsPage';
 
-export function usePersonResultsPage() {
+export function usePersonResults() {
     const route = useRoute();
     const personId = route.params.id as string;
 
@@ -76,6 +76,7 @@ export function usePersonResultsPage() {
     });
 
     return {
+        personId,
         personInfoTable,
         personalBests,
         personRecords
