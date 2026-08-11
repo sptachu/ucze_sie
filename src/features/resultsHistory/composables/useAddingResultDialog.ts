@@ -3,6 +3,7 @@ import { useAppToast } from '@/features/shared/composables/useAppToast';
 import { useResultsPage } from '@/features/resultsHistory/composables/useResultsPage';
 import {  ResultRecord } from '@/stores/resultsStore'; 
 import { DISTANCE_OPTIONS, ACTIVITY_OPTIONS, DEFAULT_RESULT_STATE } from '../shared/const/results.const';
+import {normalizeTimeInput} from '@/features/shared/composables/useNormalizeTimeInput';
 
 
 export function useAddingResultDialog(personId: string) {
@@ -44,6 +45,7 @@ export function useAddingResultDialog(personId: string) {
     const saveResult = async (updatedData: ResultRecord) => {
         if (isSubmitting.value) return;
         isSubmitting.value = true;
+        updatedData.time = normalizeTimeInput(updatedData.time);
 
         if (isEditMode.value) {
             await editRecord(updatedData.id, updatedData);

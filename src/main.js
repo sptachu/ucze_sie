@@ -11,6 +11,7 @@ import 'primeicons/primeicons.css';
 import './assets/main.css';
 import ConfirmationService from 'primevue/confirmationservice';
 import ToastService from 'primevue/toastservice';
+import DatePicker from 'primevue/datepicker';
 
 const app = createApp(App)
 const pinia = createPinia()
@@ -25,4 +26,5 @@ app.use(PrimeVue, {
 })
 app.use(ToastService);
 app.use(ConfirmationService)
+app.component('DatePicker', DatePicker);
 app.mount('#app')

@@ -5,18 +5,17 @@
             <div class="flex flex-col md:flex-row gap-4">
                 <div class="flex flex-col gap-1 flex-1">
                     <label for="resultDate" class="text-sm font-semibold">Data startu</label>
-                    <MyCalendar v-model="rawDate" :is-range="false">
-                        <template #default="{ inputValue, inputEvents }">
-                            <InputText 
-                                id="resultDate"
-                                :value="inputValue" 
-                                v-on="inputEvents" 
-                                readonly 
-                                placeholder="Wybierz datę..."
-                                class="cursor-pointer bg-white" 
-                            />
-                        </template>
-                    </MyCalendar>
+                    
+                    <!-- Nowy, czysty kalendarz PrimeVue -->
+                    <DatePicker 
+                        v-model="rawDate" 
+                        inputId="resultDate" 
+                        placeholder="Wybierz datę..." 
+                        dateFormat="dd.mm.yy"
+                        class="w-full"
+                        :showIcon="true" 
+                    />
+                    
                 </div>
                 
                 <div class="flex flex-col gap-1 flex-1">
@@ -82,7 +81,7 @@ import Button from 'primevue/button';
 import { ref, watch, computed } from 'vue';
 import type { ActivityOptions, DistanceOptions } from '../shared/const/results.const';
 import { ResultRecord } from '@/stores/resultsStore';
-import MyCalendar from '@/features/shared/components/MyCalendar.vue';
+
 
 const props = defineProps<{
     visible: boolean;
@@ -166,51 +165,7 @@ const blockInvalidChars = (event: KeyboardEvent) => {
 };
 
 const handleSave = () => {
-    const timeStr = localFormData.value.time;
-    
-    if (timeStr) {
-        const rawValue = timeStr.replace(/\D/g, ''); // todo sprobuj uzyc imput type z primevue ewentualnie wywalic z tąd tą funkcję
-        let sec = 0, min = 0, hr = 0;
-
-        if (rawValue.length <= 2) {
-            sec = parseInt(rawValue, 10) || 0;
-        } else if (rawValue.length <= 4) {
-            sec = parseInt(rawValue.slice(-2), 10) || 0;
-            min = parseInt(rawValue.slice(0, -2), 10) || 0;
-        } else {
-            sec = parseInt(rawValue.slice(-2), 10) || 0;
-            min = parseInt(rawValue.slice(-4, -2), 10) || 0;
-            hr = parseInt(rawValue.slice(0, -4), 10) || 0;
-        }
-
-        if (sec >= 60) {
-            min += Math.floor(sec / 60);
-            sec = sec % 60;
-        }
-        if (min >= 60) {
-            hr += Math.floor(min / 60);
-            min = min % 60;
-        }
-        if (hr > 99) hr = 99;
-
-        let newRaw = '';
-        if (hr > 0 || rawValue.length > 4) {
-            newRaw = hr.toString() + min.toString().padStart(2, '0') + sec.toString().padStart(2, '0');
-        } else if (min > 0 || rawValue.length > 2) {
-            newRaw = min.toString() + sec.toString().padStart(2, '0');
-        } else {
-            newRaw = sec.toString();
-        }
-
-        let formatted = newRaw;
-        if (newRaw.length > 4) {
-            formatted = `${newRaw.slice(0, -4)}:${newRaw.slice(-4, -2)}:${newRaw.slice(-2)}`;
-        } else if (newRaw.length > 2) {
-            formatted = `${newRaw.slice(0, -2)}:${newRaw.slice(-2)}`;
-        }
-        
-        localFormData.value.time = formatted;
-    }
     emit('save', localFormData.value);
-}
+};
+
 </script>
