@@ -1,28 +1,9 @@
 import { ref, reactive, computed } from 'vue';
 import { useAppToast } from '@/features/shared/composables/useAppToast'; 
 import { useResultsPage } from '@/features/resultsHistory/composables/useResultsPage';
-import { ActivityType, ResultRecord } from '@/stores/resultsStore'; 
+import {  ResultRecord } from '@/stores/resultsStore'; 
+import { DISTANCE_OPTIONS, ACTIVITY_OPTIONS, DEFAULT_RESULT_STATE } from '../shared/const/results.const';
 
-export type DistanceOptions = {
-    label: string,
-    value: string
-}
-
-export type ActivityOptions = {
-    label: string,
-    value: ActivityType | string
-}
-
-const defaultResultState = {
-    id: '',
-    date: '',
-    activityType: ActivityType.RUN, 
-    distance: '',
-    time: '',
-    startLocation: '',
-    endLocation: '',
-    equipment: ''
-};
 
 export function useAddingResultDialog(personId: string) {
     const { createRecord, editRecord } = useResultsPage(); 
@@ -33,27 +14,10 @@ export function useAddingResultDialog(personId: string) {
     const isEditMode = ref(false);
     
     const formData = reactive<ResultRecord>({
-        ...defaultResultState,
+        ...DEFAULT_RESULT_STATE,
         personId: personId
     });
 
-    const distanceOptions = ref<DistanceOptions[]>([
-        { label: '1 km', value: '1 km' },
-        { label: '2 km', value: '2 km' },
-        { label: '3 km', value: '3 km' },
-        { label: '4 km', value: '4 km' },
-        { label: '5 km', value: '5 km' },
-        { label: '10 km', value: '10 km' },
-        { label: 'Półmaraton', value: 'Półmaraton' },
-        { label: 'Maraton', value: 'Maraton' },
-        { label: '50 km', value: '50 km' },
-        { label: '100 km', value: '100 km' }
-    ]);
-
-    const activityOptions = ref<ActivityOptions[]>([
-        { label: 'Bieg', value: ActivityType.RUN }, 
-        { label: 'Rower', value: ActivityType.BIKE } 
-    ]);
 
     const dialogHeader = computed(() => isEditMode.value ? 'Edytuj wynik' : 'Dodaj nowy wynik');
     const submitLabel = computed(() => isEditMode.value ? 'Zapisz zmiany' : 'Dodaj wynik');
@@ -65,7 +29,7 @@ export function useAddingResultDialog(personId: string) {
             isEditMode.value = true;
         } else {
             Object.assign(formData, { 
-                ...defaultResultState, 
+                ...DEFAULT_RESULT_STATE, 
                 personId: personId 
             });
             isEditMode.value = false;
@@ -85,19 +49,22 @@ export function useAddingResultDialog(personId: string) {
             await editRecord(updatedData.id, updatedData);
             showSuccess('Sukces', 'Zapisano wynik!');
             closeDialog();
-        } else {
-            const { id, ...newRecordData } = updatedData;
-            await createRecord(newRecordData);
-            showSuccess('Sukces', 'Zapisano nowy wynik!');
-            closeDialog();
-        }
+            
+            return;
+        } 
+        
+        const { id, ...newRecordData } = updatedData;
+        await createRecord(newRecordData);
+        showSuccess('Sukces', 'Zapisano nowy wynik!');
+        closeDialog();
+        
     };
 
     return {
+        activityOptions: ACTIVITY_OPTIONS,
         visible,
         formData, 
-        activityOptions,
-        distanceOptions,
+        distanceOptions: DISTANCE_OPTIONS,
         dialogHeader,
         submitLabel,
         isSubmitting,

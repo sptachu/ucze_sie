@@ -2,10 +2,12 @@ import { computed, onUnmounted } from 'vue';
 import { usePeopleStore } from '@/stores/peopleStore';
 import { peopleService } from '@/features/shared/services/peopleService';
 import type { Person, User } from '@/stores/peopleStore';
+import { useResultsStore } from '@/stores/resultsStore';
+import { ResultsService } from '@/features/shared/services/resultsService';
 
 export default function useDashboardPage() {
     const store = usePeopleStore();
-
+    const resultStore = useResultsStore();
 
 
     const addPerson = async (personData: Omit<Person, 'id' | 'createdAt' | 'updatedAt'>) => {
@@ -41,12 +43,19 @@ export default function useDashboardPage() {
 
     const deletePerson = async (id: string) => {
         try {
-            await peopleService.delete(id);
+            await resultStore.loadAllRecords();
+            const personResults = resultStore.records.filter(r => r.personId === id);
+            if (personResults.length > 0) {
+            const deletePromises = personResults.map(result => ResultsService.deleteRecord(result.id));
+            await Promise.all(deletePromises);
+        }
+            await peopleService.delete(id);// todo people service  wywołać  i pousuwac wszystkie rekordy z jego id
+            
             await store.loadPeople(); 
             return true;
         } catch (error) {
             console.error('Błąd w deletePerson:', error);
-            return false;
+            return false; 
         }
     };
 

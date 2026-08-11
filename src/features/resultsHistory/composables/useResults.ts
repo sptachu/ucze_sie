@@ -4,6 +4,7 @@ import { ActivityType } from '@/stores/resultsStore';
 import { usePeopleStore } from '@/stores/peopleStore';
 import { useResultsPage } from '@/features/resultsHistory/composables/useResultsPage';
 import { useAppToast } from '@/features/shared/composables/useAppToast'; 
+import { useResultsStore } from '@/stores/resultsStore';
 import { ROUTES } from '@/router';
 
 export function usePersonResults() {
@@ -12,24 +13,11 @@ export function usePersonResults() {
     const personId = route.params.id as string;
 
     const  peopleStore  = usePeopleStore();
-    const { getPersonRecords, loadAllRecords } = useResultsPage();
+    const { getPersonRecords } = useResultsPage();
+    const resultsStore = useResultsStore();
     const { showError } = useAppToast();
 
     const personRecords = getPersonRecords(personId);
-
-    onMounted(async () => {
-        if (peopleStore.peopleList.length === 0) {
-            await peopleStore.loadPeople(); 
-        }
-        const exists = peopleStore.peopleList.some(p => p.id === personId);
-        
-        if (!exists) {
-            showError('Błąd', 'Zawodnik o podanym ID nie istnieje.');
-            router.replace(ROUTES.DASHBOARD); 
-            return; 
-        }
-        await loadAllRecords();
-    });
 
 
     const person = computed(() => {
@@ -102,6 +90,20 @@ export function usePersonResults() {
             };
         });
     });
+
+    onMounted(async () => {
+        if (peopleStore.peopleList.length === 0) {
+            await peopleStore.loadPeople(); 
+        }
+        const exists = peopleStore.peopleList.some(p => p.id === personId);
+        
+        if (!exists) {
+            showError('Błąd', 'Zawodnik o podanym ID nie istnieje.');
+            router.replace(ROUTES.DASHBOARD); 
+            return; 
+        }
+        await resultsStore.loadAllRecords();
+    });  //ref, composable, computed, (potem jakies funkcje <-- moze sie zamieniac --> watch) onmuted onunmounted na sam koniec są nawet pod to reguły eslint w firmie <-- taka jest kolejność
 
     return {
         personId,

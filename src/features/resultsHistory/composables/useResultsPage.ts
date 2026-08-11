@@ -10,20 +10,6 @@ export function useResultsPage() {
     const isSubmitting = ref(false);    
     const error = ref<string | null>(null);
 
-    const loadAllRecords = async () => {
-        isLoading.value = true;
-        error.value = null;
-        try {
-            const data = await ResultsService.getAllRecords();
-            resultsStore.setRecords(data);
-        } catch (err) {
-            console.error(err);
-            error.value = 'Nie udało się pobrać historii wyników.';
-        } finally {
-            isLoading.value = false;
-        }
-    };
-
     
     const createRecord = async (recordData: Omit<ResultRecord, 'id'>) => {
         isSubmitting.value = true;
@@ -92,11 +78,9 @@ export function useResultsPage() {
         
         records: computed(() => resultsStore.records), 
         
-        isLoading,
         isSubmitting,
         error,
         
-        loadAllRecords,
         createRecord,
         editRecord,
         removeRecord,

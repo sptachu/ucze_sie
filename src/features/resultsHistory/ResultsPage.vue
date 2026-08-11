@@ -60,12 +60,16 @@
                 <Column field="time" header="Czas" sortable class="font-bold" style="width: 15%"></Column>
                 <Column field="startLocation" header="Start" style="width: 15%"></Column>
                 <Column field="endLocation" header="Meta" style="width: 15%"></Column>
-                <Column field="equipment" header="Sprzęt" style="width: 15%"></Column>
+                <Column field="equipment" header="Sprzęt" style="width: 15%">
+                    <template #body="{ data }">
+                        {{ data.equipment || '-' }}
+                    </template>
+                </Column> // todo dodac - jak nie ma sprzętu
                 <Column header="Akcje" style="width: 10%">
                     <template #body="{ data }">
                         <div class="flex gap-3 justify-center">
                             <Button icon="pi pi-pencil" outlined rounded @click="openResultDialog(data)" />
-                            <Button icon="pi pi-trash" severity="danger" outlined rounded @click="confirmResultDeletion(data.id)" />
+                            <Button icon="pi pi-trash" severity="danger" outlined rounded @click="confirmResultDeletion(data.id)" /> 
                         </div>
                     </template>
                 </Column>
@@ -101,7 +105,7 @@ import AddingResultDialog from './components/AddingResultDialog.vue';
 import { useDeleteResult } from '@/features/resultsHistory/composables/useDeleteResult';
 
 const { 
-    personInfoTable, 
+    personInfoTable,   // todo dodać kolumne spalone kalorie na podstawie dystasnu i wieku tak na oko jakies obliczenia i czasu i jakies wykresy wyników w czasie np globalny composable stan tru false set tru i set false przy isloading
     personalBests, 
     personRecords,
     personId 

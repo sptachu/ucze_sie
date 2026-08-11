@@ -132,7 +132,7 @@ const goToResults = (id: string) => {
     router.push(`/results/${id}`);
 };
 
-// todo zeby sie na nakladalo ladowanie i brak zawodnikow i jak zrobic zeby ctrl / robilo komentarz
+// / zeby sie na nakladalo ladowanie i brak zawodnikow i jak zrobic zeby ctrl / robilo komentarz
 // dodaj jakis wykers z chartjs z najlepszymi zawodnikami albo wykres jakie czasy robią na koniec
 // dodac kolumny keidy stworzno rekord i kiedy zmodyfikowane
 // zmien uklad na gorze |wyszukiwaarka   {odstęp}        buttony|

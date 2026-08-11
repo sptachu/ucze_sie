@@ -80,7 +80,7 @@ import InputText from 'primevue/inputtext';
 import Select from 'primevue/select'; 
 import Button from 'primevue/button';
 import { ref, watch, computed } from 'vue';
-import type { ActivityOptions, DistanceOptions } from '../composables/useAddingResultDialog';
+import type { ActivityOptions, DistanceOptions } from '../shared/const/results.const';
 import { ResultRecord } from '@/stores/resultsStore';
 import MyCalendar from '@/features/shared/components/MyCalendar.vue';
 
@@ -97,7 +97,7 @@ const props = defineProps<{
 const emit = defineEmits(['update:visible', 'close', 'save']);
 
 
-const localFormData = ref<ResultRecord>({ ...props.formData });
+const localFormData = ref<ResultRecord>({ ...props.formData }); // todo odczxytywac i zapisywac powinienem byc computed get set
 const rawDate = ref<Date | null>(null);
 
 watch(
@@ -169,7 +169,7 @@ const handleSave = () => {
     const timeStr = localFormData.value.time;
     
     if (timeStr) {
-        const rawValue = timeStr.replace(/\D/g, '');
+        const rawValue = timeStr.replace(/\D/g, ''); // todo sprobuj uzyc imput type z primevue ewentualnie wywalic z tąd tą funkcję
         let sec = 0, min = 0, hr = 0;
 
         if (rawValue.length <= 2) {
